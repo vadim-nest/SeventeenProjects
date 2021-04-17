@@ -1,0 +1,65 @@
+/*
+  Colours:
+    white:  #FFFFFF
+    black:  #222222
+    yellow: #FFCC02
+    red:    #EE0000
+*/
+
+/* Mixin's */
+body {
+  background: #ffffff;
+  /* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif; */
+  font-family: "Open Sans", sans-serif;
+  height: 100%;
+}
+.wrapper {
+  width: 800px;
+  margin: 30px auto;
+  color: #222222;
+  text-align: center;
+}
+h1,
+h2,
+h3 {
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Roboto Slab", serif;
+  font-weight: 100;
+  font-size: 2.6em;
+  /* text-transform: uppercase; */
+}
+#minutes,
+#seconds,
+#tens {
+  color: #222222;
+  font-size: 2em;
+}
+#tens {
+  color: #ee0000;
+}
+button {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 10px;
+  -khtml-border-radius: 5px;
+  background: #ffcc02;
+  color: #222222;
+  border: solid 1px #fff;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 14px 10px;
+  width: 150px;
+  margin: 10px;
+  outline: none;
+  -webkit-transition: all 0.4s ease-in-out;
+}
+button:hover {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  background: #053930;
+  border: solid 1px #fff;
+  color: #fff;
+}
