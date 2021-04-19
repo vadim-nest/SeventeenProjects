@@ -35,6 +35,7 @@ window.onload = function () {
         appendMinutes.innerHTML = minutes;
         appendTens.innerHTML = tens;
         appendSeconds.innerHTML = seconds;
+        appendHours.innerHTML = hours;
     }
     
      
@@ -104,7 +105,11 @@ window.onload = function () {
         element.style.color = "#FFFFFF"
     });
 
-    clearInterval(Interval);
+    // Bad fix. My stopwatch wouldn't start without resetting it first. So I added these few lines from reset from the reset button
+    hours = "00";
+    minutes = "00";
+    tens = "00";
+    seconds = "00";
     
 
 

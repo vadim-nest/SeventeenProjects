@@ -6,7 +6,6 @@
     red:    #EE0000
 */
 
-/* Mixin's */
 body {
   background: #ffffff;
   font-family: "Open Sans", sans-serif;
@@ -44,6 +43,13 @@ h3 {
 #seconds {
   color: #ee0000;
 }
+.dots {
+  font-size: 1.4em;
+}
+.lastDots {
+  font-size: 0.9em;
+}
+
 button {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -68,4 +74,9 @@ button:hover {
   background: #222222;
   border: solid 1px #fff;
   color: #fff;
+}
+
+/* Added some padding-right, because tens are smaller then other numbers */
+p {
+  padding-right: 1.3em;
 }
