@@ -9,8 +9,6 @@
 /* Mixin's */
 body {
   background: #ffffff;
-  /* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
-    Helvetica, Arial, "Lucida Grande", sans-serif; */
   font-family: "Open Sans", sans-serif;
   height: 100%;
 }
@@ -23,19 +21,27 @@ body {
 h1,
 h2,
 h3 {
-  /* font-family: "Roboto", sans-serif; */
-  font-family: "Roboto Slab", serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 100;
   font-size: 2.6em;
-  /* text-transform: uppercase; */
 }
 #minutes,
-#seconds,
-#tens {
+#seconds {
   color: #222222;
   font-size: 2em;
 }
+#hours {
+  color: #ffffff;
+  font-size: 2em;
+}
 #tens {
+  color: #ffffff;
+  font-size: 1.35em;
+}
+.hidden {
+  color: #ffffff;
+}
+#seconds {
   color: #ee0000;
 }
 button {
@@ -59,7 +65,7 @@ button:hover {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
-  background: #053930;
+  background: #222222;
   border: solid 1px #fff;
   color: #fff;
 }
