@@ -1,3 +1,9 @@
+// Colours:
+//     white:  #FFFFFF
+//     black:  #222222
+//     yellow: #FFCC02
+//     red:    #EE0000
+
 window.onload = function () {
     let hours = "0o";
     let minutes = "0o";
@@ -13,16 +19,38 @@ window.onload = function () {
     let Interval ;
     let time = document.querySelector(".time");
     let hoursAndTens = document.querySelectorAll("span.hidden");
+    let startClicked = false;
+
+    // After you finish with this, you'll need to change the name of the Start button to Start-Reset button (in your code)
   
+    // Start/Stop button
     buttonStart.onclick = function() {
-      
-        clearInterval(Interval);
-        Interval = setInterval(startTimer, 10);
+
+        if(!startClicked) {
+            clearInterval(Interval);
+            Interval = setInterval(startTimer, 10);
+            startClicked = true;
+
+            buttonStart.style.background = "#222222";
+            buttonStart.style.color = "#FFFFFF";
+            buttonStart.innerHTML = "Stop";
+        } 
+        else if(startClicked) {
+            clearInterval(Interval);
+            startClicked = false;
+
+            buttonStart.style.background = "#FFCC02";
+            buttonStart.style.color = "#222222";
+            buttonStart.innerHTML = "Start";
+            
+        }
+        
+
     }
     
-    buttonStop.onclick = function() {
-        clearInterval(Interval);
-    }
+    // buttonStop.onclick = function() {
+    //     clearInterval(Interval);
+    // }
     
   
     buttonReset.onclick = function() {
@@ -96,6 +124,29 @@ window.onload = function () {
         });
     }
 
+    // On hover for Start/Stop button
+    buttonStart.onmouseover = function() { 
+        if(!startClicked) {
+            buttonStart.style.transition = "all 0.1s ease-in-out;";
+            buttonStart.style.background = "#FFDE5C"  // Lighter yellow
+        }
+        if(startClicked) {
+            buttonStart.style.transition = "all 0.1s ease-in-out;";
+            buttonStart.style.background = "#3D3D3D"  // Lighter black
+        }
+    }
+    
+    buttonStart.onmouseout = function() {
+        if(!startClicked) {
+            buttonStart.style.transition = "all 0.4s ease-in-out";
+            buttonStart.style.background = "#FFCC02"  // Yellow
+        }
+        if(startClicked) {
+            buttonStart.style.transition = "all 0.4s ease-in-out";
+            buttonStart.style.background = "#222222"  // Black
+        }
+    }
+    
 
     // // BAD FIXES
 

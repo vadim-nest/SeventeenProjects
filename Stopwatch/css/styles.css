@@ -67,14 +67,14 @@ button {
   outline: none;
   -webkit-transition: all 0.4s ease-in-out;
 }
-button:hover {
+/* button:hover {
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   background: #222222;
   border: solid 1px #fff;
   color: #fff;
-}
+} */
 
 /* Added some padding-right, because tens are smaller then other numbers */
 p {
