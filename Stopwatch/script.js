@@ -14,12 +14,14 @@ window.onload = function () {
     let appendMinutes = document.getElementById("minutes");
     let appendHours = document.getElementById("hours");
     let buttonStart = document.getElementById('button-start');
-    let buttonStop = document.getElementById('button-stop');
     let buttonReset = document.getElementById('button-reset');
+    let buttonLap = document.getElementById('button-lap');
     let Interval ;
     let time = document.querySelector(".time");
     let hoursAndTens = document.querySelectorAll("span.hidden");
     let startClicked = false;
+    let lapsCounter = 0;
+    
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Reset button (in your code)
   
@@ -44,15 +46,9 @@ window.onload = function () {
             buttonStart.innerHTML = "Start";
             
         }
-        
-
     }
-    
-    // buttonStop.onclick = function() {
-    //     clearInterval(Interval);
-    // }
-    
-  
+
+
     buttonReset.onclick = function() {
         clearInterval(Interval);
         hours = "00";
@@ -64,9 +60,41 @@ window.onload = function () {
         appendTens.innerHTML = tens;
         appendSeconds.innerHTML = seconds;
         appendHours.innerHTML = hours;
+
+        lapsCounter = 0;
     }
     
-     
+    // Lap button
+    buttonLap.onclick = function() {
+        let timeArrLaps = [hours, minutes, seconds, tens];
+    
+        for(let i = 0; i < timeArrLaps.length; i++) {
+            if(timeArrLaps[i].toString().length === 1) {
+                timeArrLaps[i] = "0" + timeArrLaps[i].toString();
+            }
+        } 
+
+        // create a new div element
+        const newLapDiv = document.createElement("p");
+        newLapDiv.classList.add("lap");
+
+        // and give it some content
+        const newContent = document.createTextNode("Lap " + lapsCounter + " - " + timeArrLaps[0] + ":" + timeArrLaps[1] + ":" + timeArrLaps[2] + ":" + timeArrLaps[3]);
+
+        // add the text node to the newly created div
+        newLapDiv.appendChild(newContent);
+
+        // add the newly created element and its content into the DOM
+        const currentDiv = document.querySelector("laps");
+        document.querySelector(".laps p").parentElement.prepend(newLapDiv);
+
+        ++lapsCounter;
+
+        // styling
+        lapsStyling();
+
+    }
+
     
     function startTimer () {
         tens++; 
@@ -145,6 +173,13 @@ window.onload = function () {
             buttonStart.style.transition = "all 0.4s ease-in-out";
             buttonStart.style.background = "#222222"  // Black
         }
+    }
+
+    // styling of laps
+    const lapsStyling = function () {
+        const laps = document.querySelectorAll(".lap");
+        
+        
     }
     
 

@@ -6,8 +6,6 @@
         <meta name="description" content="This is a simple JavaScript StopWatch for my portfolio">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>JavaScript Stopwatch</title>
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/styles.css">
         <script type="module" src="script.js"></script>
@@ -17,9 +15,12 @@
           <h1>Stopwatch</h1>
           <p class="time"><span id="hours", class="hidden">00</span><span class="hidden dots">:</span><span id="minutes">00</span><span class="dots">:</span><span id="seconds">00</span><span class="hidden dots lastDots">:</span><span id="tens", class="hidden">00</span></p>
           <button id="button-start">Start</button>
-          <!-- <button id="button-stop">Stop</button> -->
           <button id="button-reset">Reset</button>
+          <button id="button-lap">Lap</button>
         </div> 
+        <div class="laps">
+            <p></p>
+        </div>
     </body>
 </html>
 
