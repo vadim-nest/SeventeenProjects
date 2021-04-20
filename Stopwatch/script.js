@@ -44,8 +44,10 @@ window.onload = function () {
             buttonStart.style.background = "#FFCC02";
             buttonStart.style.color = "#222222";
             buttonStart.innerHTML = "Start";
-            
         }
+
+        lapsTimer();
+
     }
 
 
@@ -66,7 +68,10 @@ window.onload = function () {
     
     // Lap button
     buttonLap.onclick = function() {
-        let timeArrLaps = [hours, minutes, seconds, tens];
+
+        let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
+        lapsTimer();
+
     
         for(let i = 0; i < timeArrLaps.length; i++) {
             if(timeArrLaps[i].toString().length === 1) {
@@ -92,6 +97,8 @@ window.onload = function () {
 
         // styling
         lapsStyling();
+
+
 
     }
 
@@ -196,6 +203,50 @@ window.onload = function () {
     minutes = "00";
     tens = "00";
     seconds = "00";
+
+    ///////////////////////////////////////
+    // Laps funcitonality
+    //////////////////////////////////////
+
+    let hoursLaps = "0o";
+    let minutesLaps = "0o";
+    let secondsLaps = "0o"; 
+    let tensLaps = "0o"; 
+    let IntervalLaps ;
+
+    const lapsTimer = function () {
+
+        // Set lap timer to zeroes (reset lap timer)
+        clearInterval(IntervalLaps);
+        hoursLaps = "00";
+        minutesLaps = "00";
+        secondsLaps = "00";
+        tensLaps = "00";
+
+        // Start lap timer
+        clearInterval(IntervalLaps);
+        IntervalLaps = setInterval(startTimerForLaps, 10);
+
+    };
+     
+    function startTimerForLaps () {
+        tensLaps++; 
+        
+        if (tensLaps > 99) {
+            secondsLaps++;
+            tensLaps = 0;
+        }
+
+        if (secondsLaps > 59) {
+            minutesLaps++;
+            secondsLaps = 0;
+        }
+
+        if (minutesLaps > 59) {
+            hoursLaps++;
+            minutesLaps = 0;
+        }
+    }
     
 
 
