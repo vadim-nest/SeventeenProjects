@@ -17,6 +17,17 @@ body {
   color: #222222;
   text-align: center;
 }
+.laps {
+  width: 800px;
+  margin: 30px auto;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.4em;
+}
+.lap {
+  width: 800px;
+  /* margin: 3px auto; */
+}
 h1,
 h2,
 h3 {

@@ -13,13 +13,14 @@
     <body>
         <div class="wrapper">
           <h1>Stopwatch</h1>
-          <p class="time"><span id="hours", class="hidden">00</span><span class="hidden dots">:</span><span id="minutes">00</span><span class="dots">:</span><span id="seconds">00</span><span class="hidden dots lastDots">:</span><span id="tens", class="hidden">00</span></p>
+          <p class="time"><span id="hours", class="hidden">00</span><span class="hidden dots">:</span><span id="minutes">00</span><span class="dots">:</span><span id="seconds">00</span><span class="hidden dots lastDots">.</span><span id="tens", class="hidden">00</span></p>
           <button id="button-start">Start</button>
           <button id="button-reset">Reset</button>
           <button id="button-lap">Lap</button>
         </div> 
         <div class="laps">
-            <p></p>
+            <p class="timeLaps lap">Lap <span id="lapsCounter">1</span>  -  <span id="hoursLaps", class="hiddenLaps">00</span><span class="hiddenLaps dotsLaps">:</span><span id="minutesLaps">00</span><span class="dotsLaps">:</span><span id="secondsLaps">00</span><span class="hiddenLaps dotsLaps">.</span><span id="tensLaps", class="hiddenLaps">00</span></p>
+            <p id="forPrependLaps"></p>
         </div>
     </body>
 </html>

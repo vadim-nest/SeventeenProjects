@@ -20,7 +20,8 @@ window.onload = function () {
     let time = document.querySelector(".time");
     let hoursAndTens = document.querySelectorAll("span.hidden");
     let startClicked = false;
-    let lapsCounter = 0;
+    let appendLapsCounter = document.querySelector("#lapsCounter");
+    let lapsCounter = 1;
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Reset button (in your code)
@@ -28,6 +29,7 @@ window.onload = function () {
     // Start/Stop button
     buttonStart.onclick = function() {
 
+        // Start button
         if(!startClicked) {
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
@@ -36,7 +38,12 @@ window.onload = function () {
             buttonStart.style.background = "#222222";
             buttonStart.style.color = "#FFFFFF";
             buttonStart.innerHTML = "Stop";
+
+            // Laps
+            lapsTimer();
+            document.querySelector(".laps").style.color = "#A3A3A3";
         } 
+        // Stop button
         else if(startClicked) {
             clearInterval(Interval);
             startClicked = false;
@@ -44,14 +51,18 @@ window.onload = function () {
             buttonStart.style.background = "#FFCC02";
             buttonStart.style.color = "#222222";
             buttonStart.innerHTML = "Start";
+
+            // Laps
+            clearInterval(IntervalLaps);
         }
 
-        lapsTimer();
+        
 
     }
 
-
+    // Reset button
     buttonReset.onclick = function() {
+        // Reset Main Timer
         clearInterval(Interval);
         hours = "00";
         minutes = "00";
@@ -63,14 +74,28 @@ window.onload = function () {
         appendSeconds.innerHTML = seconds;
         appendHours.innerHTML = hours;
 
-        lapsCounter = 0;
+        // Reset Laps
+        clearInterval(IntervalLaps);
+        hoursLaps = "00";
+        minutesLaps = "00";
+        tensLaps = "00";
+        secondsLaps = "00";
+    
+        appendMinutesLaps.innerHTML = minutesLaps;
+        appendTensLaps.innerHTML = tensLaps;
+        appendSecondsLaps.innerHTML = secondsLaps;
+        appendHoursLaps.innerHTML = hoursLaps;
+
+        lapsCounter = 1;
+        appendLapsCounter.innerHTML = lapsCounter;
+
     }
     
     // Lap button
     buttonLap.onclick = function() {
 
         let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
-        lapsTimer();
+        
 
     
         for(let i = 0; i < timeArrLaps.length; i++) {
@@ -84,16 +109,20 @@ window.onload = function () {
         newLapDiv.classList.add("lap");
 
         // and give it some content
-        const newContent = document.createTextNode("Lap " + lapsCounter + " - " + timeArrLaps[0] + ":" + timeArrLaps[1] + ":" + timeArrLaps[2] + ":" + timeArrLaps[3]);
+        const newContent = document.createTextNode("Lap " + lapsCounter + " - " + timeArrLaps[0] + ":" + timeArrLaps[1] + ":" + timeArrLaps[2] + "." + timeArrLaps[3]);
+        
 
         // add the text node to the newly created div
         newLapDiv.appendChild(newContent);
 
         // add the newly created element and its content into the DOM
         const currentDiv = document.querySelector("laps");
-        document.querySelector(".laps p").parentElement.prepend(newLapDiv);
+        document.querySelector("#forPrependLaps").prepend(newLapDiv);
+
+        lapsTimer();
 
         ++lapsCounter;
+        appendLapsCounter.innerHTML = lapsCounter;
 
         // styling
         lapsStyling();
@@ -144,6 +173,11 @@ window.onload = function () {
     
     }
 
+
+    ///////////////////////////////////////
+    // Styling
+    //////////////////////////////////////
+
     // Changing hours and tens appearance (color) on hover
     time.onmouseover = function() {
         hoursAndTens.forEach(function(element) {
@@ -184,13 +218,17 @@ window.onload = function () {
 
     // styling of laps
     const lapsStyling = function () {
-        const laps = document.querySelectorAll(".lap");
+        const laps = document.querySelectorAll("p.lap");
+
+        console.log(laps);
         
         
     }
     
 
-    // // BAD FIXES
+    ///////////////////////////////////////
+    // BAD FIXES
+    //////////////////////////////////////
 
     // Bad fix of the first hover on time
     hoursAndTens.forEach(function(element) {
@@ -204,6 +242,7 @@ window.onload = function () {
     tens = "00";
     seconds = "00";
 
+
     ///////////////////////////////////////
     // Laps funcitonality
     //////////////////////////////////////
@@ -213,6 +252,10 @@ window.onload = function () {
     let secondsLaps = "0o"; 
     let tensLaps = "0o"; 
     let IntervalLaps ;
+    let appendTensLaps = document.getElementById("tensLaps");
+    let appendSecondsLaps = document.getElementById("secondsLaps")
+    let appendMinutesLaps = document.getElementById("minutesLaps");
+    let appendHoursLaps = document.getElementById("hoursLaps");
 
     const lapsTimer = function () {
 
@@ -231,20 +274,40 @@ window.onload = function () {
      
     function startTimerForLaps () {
         tensLaps++; 
+      
+        if(tensLaps <= 9){
+            appendTensLaps.innerHTML = "0" + tensLaps;
+        }
+      
+        if (tensLaps > 9){
+            appendTensLaps.innerHTML = tensLaps;
         
+        } 
+      
         if (tensLaps > 99) {
             secondsLaps++;
+            appendSecondsLaps.innerHTML = "0" + secondsLaps;
             tensLaps = 0;
+            appendTensLaps.innerHTML = "0" + 0;
+        }
+      
+        if (secondsLaps > 9){
+            appendSecondsLaps.innerHTML = secondsLaps;
         }
 
         if (secondsLaps > 59) {
             minutesLaps++;
+            appendMinutesLaps.innerHTML = "0" + minutesLaps;
             secondsLaps = 0;
+            appendSecondsLaps.innerHTML = "0" + 0;
         }
 
         if (minutesLaps > 59) {
             hoursLaps++;
+            appendHoursLaps.innerHTML = "0" + hoursLaps;
             minutesLaps = 0;
+            appendMinutesLaps.innerHTML = "0" + 0;
+
         }
     }
     
@@ -254,3 +317,5 @@ window.onload = function () {
     
   
 }
+
+
