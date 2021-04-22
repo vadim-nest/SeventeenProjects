@@ -28,6 +28,11 @@ body {
   width: 800px;
   /* margin: 3px auto; */
 }
+/* Probably you can remove next rule, because it's being overwritten by js */
+.hiddenhoursLaps,
+.hoursDotsLaps {
+  color: #ffffff;
+}
 h1,
 h2,
 h3 {

@@ -1,8 +1,9 @@
 // Colours:
-//     white:  #FFFFFF
-//     black:  #222222
-//     yellow: #FFCC02
-//     red:    #EE0000
+//     white:           #FFFFFF
+//     black:           #222222
+//     yellow:          #FFCC02
+//     red:             #EE0000
+//     grey for laps:   #A3A3A3
 
 window.onload = function () {
     let hours = "0o";
@@ -22,6 +23,7 @@ window.onload = function () {
     let startClicked = false;
     let appendLapsCounter = document.querySelector("#lapsCounter");
     let lapsCounter = 1;
+    let mainTimerStartOrContinue = true;        // true if the main timer just starts from zero (bug fix, start button was causing laps timer to reset)
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Reset button (in your code)
@@ -41,7 +43,10 @@ window.onload = function () {
 
             // Laps
             lapsTimer();
-            document.querySelector(".laps").style.color = "#A3A3A3";
+            mainTimerStartOrContinue = false;
+
+            // Laps styling
+            lapsStyling();  
         } 
         // Stop button
         else if(startClicked) {
@@ -89,6 +94,8 @@ window.onload = function () {
         lapsCounter = 1;
         appendLapsCounter.innerHTML = lapsCounter;
 
+        mainTimerStartOrContinue = true;
+
     }
     
     // Lap button
@@ -110,7 +117,9 @@ window.onload = function () {
 
         // and give it some content
         const newContent = document.createTextNode("Lap " + lapsCounter + " - " + timeArrLaps[0] + ":" + timeArrLaps[1] + ":" + timeArrLaps[2] + "." + timeArrLaps[3]);
-        
+        // timeArrLaps[0].classList.add("testClass");
+
+        console.log(newContent);
 
         // add the text node to the newly created div
         newLapDiv.appendChild(newContent);
@@ -119,16 +128,15 @@ window.onload = function () {
         const currentDiv = document.querySelector("laps");
         document.querySelector("#forPrependLaps").prepend(newLapDiv);
 
+        mainTimerStartOrContinue = true;
         lapsTimer();
+        mainTimerStartOrContinue = false;
 
         ++lapsCounter;
         appendLapsCounter.innerHTML = lapsCounter;
 
         // styling
         lapsStyling();
-
-
-
     }
 
     
@@ -218,34 +226,56 @@ window.onload = function () {
 
     // styling of laps
     const lapsStyling = function () {
+        document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
+        let hoursAndDotsLaps = [document.querySelector("#hoursLaps"), document.querySelector("#hoursDotsLaps")];
+        // hoursAndDotsLaps.forEach(element => {
+        //     element.style.color = "#ffffff";
+        // });
+
+        document.querySelector("#hoursLaps").style.color = "#ffffff"
+        document.querySelector("#hoursDotsLaps").style.color = "#ffffff"
         const laps = document.querySelectorAll("p.lap");
 
-        console.log(laps);
+        console.log(laps.item(0));
+
+        
+        // All the other laps (except the top one)
+        laps.forEach(element => {
+            element.onmouseover = function() {
+                element.style.transition = "all 0.4s ease-in-out";
+                element.style.color = "#222222"  // Black
+            }
+            element.onmouseout = function() {
+                element.style.transition = "all 0.4s ease-in-out";
+                element.style.color = "#A3A3A3";  // Grey for laps
+            }
+        });
+
+        // The top (running) lap
+        let runningLapSeconds = document.querySelector("#secondsLaps");
+
+        laps.item(0).onmouseover = function() {
+            laps.item(0).style.transition = "all 0.4s ease-in-out";
+            laps.item(0).style.color = "#222222"  // Black
+
+            runningLapSeconds.style.transition = "all 0.4s ease-in-out";
+            runningLapSeconds.style.color = "#EE0000";  // Red
+        }
+        laps.item(0).onmouseout = function() {
+            laps.item(0).style.transition = "all 0.4s ease-in-out";
+            laps.item(0).style.color = "#A3A3A3";  // Grey for laps
+
+            runningLapSeconds.style.transition = "all 0.4s ease-in-out";
+            runningLapSeconds.style.color = "#A3A3A3";  // Grey for laps
+        }
         
         
     }
     
 
-    ///////////////////////////////////////
-    // BAD FIXES
-    //////////////////////////////////////
-
-    // Bad fix of the first hover on time
-    hoursAndTens.forEach(function(element) {
-        element.style.transition = "all 0.4s ease-in-out";
-        element.style.color = "#FFFFFF"
-    });
-
-    // Bad fix. My stopwatch wouldn't start without resetting it first. So I added these few lines from reset from the reset button
-    hours = "00";
-    minutes = "00";
-    tens = "00";
-    seconds = "00";
-
-
-    ///////////////////////////////////////
+    ////////////////////////////////////////////
     // Laps funcitonality
-    //////////////////////////////////////
+    ///////////////////////////////////////////
 
     let hoursLaps = "0o";
     let minutesLaps = "0o";
@@ -260,12 +290,19 @@ window.onload = function () {
     const lapsTimer = function () {
 
         // Set lap timer to zeroes (reset lap timer)
-        clearInterval(IntervalLaps);
-        hoursLaps = "00";
-        minutesLaps = "00";
-        secondsLaps = "00";
-        tensLaps = "00";
+        if(mainTimerStartOrContinue) {
+            clearInterval(IntervalLaps);
+            hoursLaps = "00";
+            minutesLaps = "00";
+            secondsLaps = "00";
+            tensLaps = "00";
 
+            appendHoursLaps.innerHTML = hoursLaps;
+            appendMinutesLaps.innerHTML = minutesLaps;
+            appendSecondsLaps.innerHTML = secondsLaps;
+            appendTensLaps.innerHTML = tensLaps;
+        }
+        
         // Start lap timer
         clearInterval(IntervalLaps);
         IntervalLaps = setInterval(startTimerForLaps, 10);
@@ -310,6 +347,23 @@ window.onload = function () {
 
         }
     }
+
+
+    ///////////////////////////////////////
+    // BAD FIXES
+    //////////////////////////////////////
+
+    // Bad fix of the first hover on time
+    hoursAndTens.forEach(function(element) {
+        element.style.transition = "all 0.4s ease-in-out";
+        element.style.color = "#FFFFFF"
+    });
+
+    // Bad fix. My stopwatch wouldn't start without resetting it first. So I added these few lines from reset from the reset button
+    hours = "00";
+    minutes = "00";
+    tens = "00";
+    seconds = "00";
     
 
 
