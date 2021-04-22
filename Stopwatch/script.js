@@ -103,8 +103,6 @@ window.onload = function () {
 
         let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
         
-
-    
         for(let i = 0; i < timeArrLaps.length; i++) {
             if(timeArrLaps[i].toString().length === 1) {
                 timeArrLaps[i] = "0" + timeArrLaps[i].toString();
@@ -115,14 +113,7 @@ window.onload = function () {
         const newLapDiv = document.createElement("p");
         newLapDiv.classList.add("lap");
 
-        // and give it some content
-        const newContent = document.createTextNode("Lap " + lapsCounter + " - " + timeArrLaps[0] + ":" + timeArrLaps[1] + ":" + timeArrLaps[2] + "." + timeArrLaps[3]);
-        // timeArrLaps[0].classList.add("testClass");
-
-        console.log(newContent);
-
-        // add the text node to the newly created div
-        newLapDiv.appendChild(newContent);
+        newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
 
         // add the newly created element and its content into the DOM
         const currentDiv = document.querySelector("laps");
@@ -204,11 +195,11 @@ window.onload = function () {
     // On hover for Start/Stop button
     buttonStart.onmouseover = function() { 
         if(!startClicked) {
-            buttonStart.style.transition = "all 0.1s ease-in-out;";
+            buttonStart.style.transition = "all 0.1s ease-in-out";
             buttonStart.style.background = "#FFDE5C"  // Lighter yellow
         }
         if(startClicked) {
-            buttonStart.style.transition = "all 0.1s ease-in-out;";
+            buttonStart.style.transition = "all 0.1s ease-in-out";
             buttonStart.style.background = "#3D3D3D"  // Lighter black
         }
     }
@@ -226,23 +217,24 @@ window.onload = function () {
 
     // styling of laps
     const lapsStyling = function () {
-        document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
-        let hoursAndDotsLaps = [document.querySelector("#hoursLaps"), document.querySelector("#hoursDotsLaps")];
-        // hoursAndDotsLaps.forEach(element => {
-        //     element.style.color = "#ffffff";
-        // });
+        // YOU STOPPED HERE!!! 
 
-        document.querySelector("#hoursLaps").style.color = "#ffffff"
-        document.querySelector("#hoursDotsLaps").style.color = "#ffffff"
+        document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
+
+        // let hoursAndDotsLaps = document.querySelector(".hoursAndDotsLaps");
+        // let hoursAndDotsLaps = document.querySelector(".hoursAndDotsLaps").nextSibling;
+        // console.log(hoursAndDotsLaps);
+
+        // if(hoursAndDotsLaps !== null) {
+        //     hoursAndDotsLaps.style.color = "#ffffff";
+        // }
+
         const laps = document.querySelectorAll("p.lap");
 
-        console.log(laps.item(0));
-
-        
         // All the other laps (except the top one)
         laps.forEach(element => {
             element.onmouseover = function() {
-                element.style.transition = "all 0.4s ease-in-out";
+                element.style.transition = "all 0.1s ease-in-out";
                 element.style.color = "#222222"  // Black
             }
             element.onmouseout = function() {
@@ -255,10 +247,10 @@ window.onload = function () {
         let runningLapSeconds = document.querySelector("#secondsLaps");
 
         laps.item(0).onmouseover = function() {
-            laps.item(0).style.transition = "all 0.4s ease-in-out";
+            laps.item(0).style.transition = "all 0.1s ease-in-out";
             laps.item(0).style.color = "#222222"  // Black
 
-            runningLapSeconds.style.transition = "all 0.4s ease-in-out";
+            runningLapSeconds.style.transition = "all 0.1s ease-in-out";
             runningLapSeconds.style.color = "#EE0000";  // Red
         }
         laps.item(0).onmouseout = function() {
