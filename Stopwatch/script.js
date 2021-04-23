@@ -112,6 +112,8 @@ window.onload = function () {
         // create a new div element
         const newLapDiv = document.createElement("p");
         newLapDiv.classList.add("lap");
+        newLapDiv.classList.add("lapNum" + lapsCounter);
+
 
         newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
 
@@ -127,6 +129,9 @@ window.onload = function () {
         appendLapsCounter.innerHTML = lapsCounter;
 
         // styling
+        // if(lapsCounter > 1) {
+        //     document.querySelectorAll(".hoursAndDotsLaps").style.color("#ffffff");
+        // }
         lapsStyling();
     }
 
@@ -217,41 +222,71 @@ window.onload = function () {
 
     // styling of laps
     const lapsStyling = function () {
-        // YOU STOPPED HERE!!! 
+
+        let runningLapHours = document.querySelector(".hiddenHoursLaps");
+        let runningLapHoursDots = document.querySelector(".dotsLaps");
 
         document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
 
-        // let hoursAndDotsLaps = document.querySelector(".hoursAndDotsLaps");
-        // let hoursAndDotsLaps = document.querySelector(".hoursAndDotsLaps").nextSibling;
-        // console.log(hoursAndDotsLaps);
-
-        // if(hoursAndDotsLaps !== null) {
-        //     hoursAndDotsLaps.style.color = "#ffffff";
-        // }
-
         const laps = document.querySelectorAll("p.lap");
 
+
+        //  White color for hours in laps on page load, starting with second lap
+        runningLapHours.style.color = "#ffffff";
+        runningLapHoursDots.style.color = "#ffffff";
+        if (laps.length > 1) {
+            document.querySelector(".hoursAndDotsLaps").style.color = "#ffffff"; 
+        }
+
+        
         // All the other laps (except the top one)
         laps.forEach(element => {
+
             element.onmouseover = function() {
                 element.style.transition = "all 0.1s ease-in-out";
                 element.style.color = "#222222"  // Black
+
+                // Changing hours color on hover
+                let currentLapNum = currElementNum();
+                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.1s ease-in-out";
+                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
+
             }
             element.onmouseout = function() {
                 element.style.transition = "all 0.4s ease-in-out";
                 element.style.color = "#A3A3A3";  // Grey for laps
+
+                // Changing hours color out hover
+                let currentLapNum = currElementNum();
+                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
+                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
+            }
+
+            // Calculating current element's lap number (currentLapNum)
+            const currElementNum = function () {
+                let currentLapClasses = element.getAttribute("class");  // returns a string
+                let currentLapNumTempArr = currentLapClasses.split("lapNum");
+                let currentLapNum = currentLapNumTempArr[1].toString().charAt(0);
+                return currentLapNum;
             }
         });
 
         // The top (running) lap
         let runningLapSeconds = document.querySelector("#secondsLaps");
+        // let runningLapHoursDots = document.querySelector(".hiddenLaps");
 
         laps.item(0).onmouseover = function() {
             laps.item(0).style.transition = "all 0.1s ease-in-out";
             laps.item(0).style.color = "#222222"  // Black
 
+            // Red for seconds
             runningLapSeconds.style.transition = "all 0.1s ease-in-out";
             runningLapSeconds.style.color = "#EE0000";  // Red
+
+            runningLapHours.style.transition = "all 0.1s ease-in-out";
+            runningLapHours.style.color = "#222222";
+            runningLapHoursDots.style.transition = "all 0.1s ease-in-out";
+            runningLapHoursDots.style.color = "#222222";
         }
         laps.item(0).onmouseout = function() {
             laps.item(0).style.transition = "all 0.4s ease-in-out";
@@ -259,6 +294,11 @@ window.onload = function () {
 
             runningLapSeconds.style.transition = "all 0.4s ease-in-out";
             runningLapSeconds.style.color = "#A3A3A3";  // Grey for laps
+
+            runningLapHours.style.transition = "all 0.4s ease-in-out";
+            runningLapHours.style.color = "#ffffff";
+            runningLapHoursDots.style.transition = "all 0.4s ease-in-out";
+            runningLapHoursDots.style.color = "#ffffff";
         }
         
         
