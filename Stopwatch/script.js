@@ -4,6 +4,8 @@
 //     yellow:          #FFCC02
 //     red:             #EE0000
 //     grey for laps:   #A3A3A3
+//     light yellow for 
+//     button hover     #FFDE5C
 
 window.onload = function () {
     let hours = "0o";
@@ -15,8 +17,9 @@ window.onload = function () {
     let appendMinutes = document.getElementById("minutes");
     let appendHours = document.getElementById("hours");
     let buttonStart = document.getElementById('button-start');
-    let buttonReset = document.getElementById('button-reset');
-    let buttonLap = document.getElementById('button-lap');
+    let buttonLapReset = document.getElementById('button-lap-reset');
+    // let buttonReset = document.getElementById('button-reset');
+    // let buttonLap = document.getElementById('button-lap');
     let Interval ;
     let time = document.querySelector(".time");
     let hoursAndTens = document.querySelectorAll("span.hidden");
@@ -26,7 +29,7 @@ window.onload = function () {
     let mainTimerStartOrContinue = true;        // true if the main timer just starts from zero (bug fix, start button was causing laps timer to reset)
     
 
-    // After you finish with this, you'll need to change the name of the Start button to Start-Reset button (in your code)
+    // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
   
     // Start/Stop button
     buttonStart.onclick = function() {
@@ -43,11 +46,29 @@ window.onload = function () {
 
             // Laps
             lapsTimer();
-            mainTimerStartOrContinue = false;
 
             // Laps styling
-            lapsStyling();  
-        } 
+            lapsStyling(); 
+            
+            // Button Lap/Reset Styling
+            // before first time press
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // This should be out of the button click! fix it!
+            if (mainTimerStartOrContinue) {
+                buttonLapReset.style.background = "#ffffff";
+                buttonLapReset.style.color = "#FFFFFF";
+                buttonLapReset.innerHTML = "Lap";
+            } 
+            // after first time press
+            else {
+                buttonLapReset.style.background = "#222222";
+                buttonLapReset.style.color = "#222222";
+                buttonLapReset.innerHTML = "Lap";
+            }
+            
+
+            mainTimerStartOrContinue = false;
+} 
         // Stop button
         else if(startClicked) {
             clearInterval(Interval);
@@ -59,81 +80,155 @@ window.onload = function () {
 
             // Laps
             clearInterval(IntervalLaps);
+
+            // Button Lap/Reset Styling
+            buttonLapReset.style.background = "#FFCC02";
+            buttonLapReset.style.color = "#222222";
+            buttonLapReset.innerHTML = "Reset";
         }
 
         
 
     }
 
-    // Reset button
-    buttonReset.onclick = function() {
-        // Reset Main Timer
-        clearInterval(Interval);
-        hours = "00";
-        minutes = "00";
-        tens = "00";
-        seconds = "00";
-    
-        appendMinutes.innerHTML = minutes;
-        appendTens.innerHTML = tens;
-        appendSeconds.innerHTML = seconds;
-        appendHours.innerHTML = hours;
-
-        // Reset Laps
-        clearInterval(IntervalLaps);
-        hoursLaps = "00";
-        minutesLaps = "00";
-        tensLaps = "00";
-        secondsLaps = "00";
-    
-        appendMinutesLaps.innerHTML = minutesLaps;
-        appendTensLaps.innerHTML = tensLaps;
-        appendSecondsLaps.innerHTML = secondsLaps;
-        appendHoursLaps.innerHTML = hoursLaps;
-
-        lapsCounter = 1;
-        appendLapsCounter.innerHTML = lapsCounter;
-
-        mainTimerStartOrContinue = true;
-
-    }
-    
-    // Lap button
-    buttonLap.onclick = function() {
-
-        let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
+    // After you finish with this, you'll need to change the name of the Lap button to Lap-Reset button (in your code)
+  
+    // Lap/Reset button
+    buttonLapReset.onclick = function() {
+        // Lap button
+        if(startClicked) {
+            let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
         
-        for(let i = 0; i < timeArrLaps.length; i++) {
-            if(timeArrLaps[i].toString().length === 1) {
-                timeArrLaps[i] = "0" + timeArrLaps[i].toString();
-            }
+            for(let i = 0; i < timeArrLaps.length; i++) {
+                if(timeArrLaps[i].toString().length === 1) {
+                    timeArrLaps[i] = "0" + timeArrLaps[i].toString();
+                }
+            } 
+    
+            // create a new div element
+            const newLapDiv = document.createElement("p");
+            newLapDiv.classList.add("lap");
+            newLapDiv.classList.add("lapNum" + lapsCounter);
+    
+    
+            newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
+    
+            // add the newly created element and its content into the DOM
+            const currentDiv = document.querySelector("laps");
+            document.querySelector("#forPrependLaps").prepend(newLapDiv);
+    
+            mainTimerStartOrContinue = true;
+            lapsTimer();
+            mainTimerStartOrContinue = false;
+    
+            ++lapsCounter;
+            appendLapsCounter.innerHTML = lapsCounter;
+    
+            // styling
+            lapsStyling();
         } 
+        // Reset button
+        else if(!startClicked) {
+            // Reset Main Timer
+            clearInterval(Interval);
+            hours = "00";
+            minutes = "00";
+            tens = "00";
+            seconds = "00";
 
-        // create a new div element
-        const newLapDiv = document.createElement("p");
-        newLapDiv.classList.add("lap");
-        newLapDiv.classList.add("lapNum" + lapsCounter);
+            appendMinutes.innerHTML = minutes;
+            appendTens.innerHTML = tens;
+            appendSeconds.innerHTML = seconds;
+            appendHours.innerHTML = hours;
+
+            // Reset Laps
+            clearInterval(IntervalLaps);
+            hoursLaps = "00";
+            minutesLaps = "00";
+            tensLaps = "00";
+            secondsLaps = "00";
+
+            appendMinutesLaps.innerHTML = minutesLaps;
+            appendTensLaps.innerHTML = tensLaps;
+            appendSecondsLaps.innerHTML = secondsLaps;
+            appendHoursLaps.innerHTML = hoursLaps;
+
+            lapsCounter = 1;
+            appendLapsCounter.innerHTML = lapsCounter;
+
+            mainTimerStartOrContinue = true;
 
 
-        newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
-
-        // add the newly created element and its content into the DOM
-        const currentDiv = document.querySelector("laps");
-        document.querySelector("#forPrependLaps").prepend(newLapDiv);
-
-        mainTimerStartOrContinue = true;
-        lapsTimer();
-        mainTimerStartOrContinue = false;
-
-        ++lapsCounter;
-        appendLapsCounter.innerHTML = lapsCounter;
-
-        // styling
-        // if(lapsCounter > 1) {
-        //     document.querySelectorAll(".hoursAndDotsLaps").style.color("#ffffff");
-        // }
-        lapsStyling();
+        }
     }
+
+
+    // // Reset button
+    // buttonReset.onclick = function() {
+    //     // Reset Main Timer
+    //     clearInterval(Interval);
+    //     hours = "00";
+    //     minutes = "00";
+    //     tens = "00";
+    //     seconds = "00";
+    
+    //     appendMinutes.innerHTML = minutes;
+    //     appendTens.innerHTML = tens;
+    //     appendSeconds.innerHTML = seconds;
+    //     appendHours.innerHTML = hours;
+
+    //     // Reset Laps
+    //     clearInterval(IntervalLaps);
+    //     hoursLaps = "00";
+    //     minutesLaps = "00";
+    //     tensLaps = "00";
+    //     secondsLaps = "00";
+    
+    //     appendMinutesLaps.innerHTML = minutesLaps;
+    //     appendTensLaps.innerHTML = tensLaps;
+    //     appendSecondsLaps.innerHTML = secondsLaps;
+    //     appendHoursLaps.innerHTML = hoursLaps;
+
+    //     lapsCounter = 1;
+    //     appendLapsCounter.innerHTML = lapsCounter;
+
+    //     mainTimerStartOrContinue = true;
+
+    // }
+    
+    // // Lap button
+    // buttonLap.onclick = function() {
+
+    //     let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
+        
+    //     for(let i = 0; i < timeArrLaps.length; i++) {
+    //         if(timeArrLaps[i].toString().length === 1) {
+    //             timeArrLaps[i] = "0" + timeArrLaps[i].toString();
+    //         }
+    //     } 
+
+    //     // create a new div element
+    //     const newLapDiv = document.createElement("p");
+    //     newLapDiv.classList.add("lap");
+    //     newLapDiv.classList.add("lapNum" + lapsCounter);
+
+
+    //     newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
+
+    //     // add the newly created element and its content into the DOM
+    //     const currentDiv = document.querySelector("laps");
+    //     document.querySelector("#forPrependLaps").prepend(newLapDiv);
+
+    //     mainTimerStartOrContinue = true;
+    //     lapsTimer();
+    //     mainTimerStartOrContinue = false;
+
+    //     ++lapsCounter;
+    //     appendLapsCounter.innerHTML = lapsCounter;
+
+    //     // styling
+    //     lapsStyling();
+    // }
 
     
     function startTimer () {
