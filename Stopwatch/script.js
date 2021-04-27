@@ -4,9 +4,14 @@
 //     yellow:          #FFCC02
 //     red:             #EE0000
 //     grey for laps:   #A3A3A3
-//     light yellow for 
-//     button hover     #FFDE5C
 //      /////////////////////////
+
+//     colors for buttons:
+//     yellow button :          #FFDB4D
+//     yellow button on hover : #FFD633
+//     yellow button on press : #FFCC00
+
+//  Old, needs to be removed
 //     yellow button before hover: #FFDB4D
 //     yellow button on hover: #FFCC00 
 
@@ -210,13 +215,13 @@ window.onload = function () {
         if(!startClicked) {     // Start button
             buttonStart.style.background = "#FFFFFF";
             buttonStart.innerHTML = "Stop";
-            buttonStart.style.border = "solid 3px #ffdb4d"
+            buttonStart.style.border = "solid 3px #FFDB4D"
             buttonStart.style.color = "#EE0000";
         }
         if(startClicked) {      // Stop button
-            buttonStart.style.background = "#FFCC02";
+            buttonStart.style.background = "#FFDB4D";
             buttonStart.innerHTML = "Start";
-            buttonStart.style.border = "solid 3px #FFCC02";
+            buttonStart.style.border = "solid 3px #FFDB4D";
             buttonStart.style.color = "#222222";
 
         }
@@ -226,13 +231,14 @@ window.onload = function () {
     buttonStart.onmouseover = function() { 
         if(!startClicked) {     // Start button
             buttonStart.style.transition = "all 0.1s ease-in-out";
-            buttonStart.style.background = "#FFCC00"
-            buttonStart.style.border = "solid 3px #FFCC00"
+            buttonStart.style.background = "#FFD633"
+            buttonStart.style.border = "solid 3px #FFD633"
         }
         if(startClicked) {      // Stop button
             buttonStart.style.transition = "all 0.1s ease-in-out";
             buttonStart.style.background = "#ffffff" 
             buttonStart.style.color = "#EE0000";
+            buttonStart.style.border = "solid 3px #FFD633"
         }
     }
     
@@ -242,28 +248,75 @@ window.onload = function () {
             buttonStart.style.background = "#FFDB4D" 
             buttonStart.style.border = "solid 3px #FFDB4D"
             buttonStart.style.color = "#222222";
+            buttonStart.style.fontSize = "1.2em";
         }
         if(startClicked) {      // Stop button
             buttonStart.style.transition = "all 0.4s ease-in-out";
             buttonStart.style.background = "#ffffff" 
             buttonStart.style.color = "#222222";
+            buttonStart.style.border = "solid 3px #FFDB4D"
         }
     }
 
-    buttonStart.onclick = function() {
-        // E0B400
+    // Button Start/Stop on mousedown/mouseup
+    buttonStart.addEventListener('mousedown', e => {
         if(!startClicked) {     // Start button
-            buttonStart.style.transition = "all 0.4s ease-in-out";
-            buttonStart.style.background = "#FFDB4D" 
-            buttonStart.style.border = "solid 3px #FFDB4D"
-            buttonStart.style.color = "#222222";
+            buttonStart.style.background = "#FFCC00";
+            buttonStart.style.border = "solid 3px #FFCC00";
+            buttonStart.style.fontSize = "1.18em";
         }
         if(startClicked) {      // Stop button
-            buttonStart.style.transition = "all 0.4s ease-in-out";
-            buttonStart.style.background = "#ffffff" 
-            buttonStart.style.color = "#222222";
+            buttonStart.style.background = "#F5F5F5";
+            buttonStart.style.fontSize = "1.21em";
+            buttonStart.style.border = "solid 3px #FFCC00";
         }
-    }
+    });
+
+    buttonStart.addEventListener('mouseup', e => {
+        if(!startClicked) {     // Start button
+            buttonStart.style.background = "#FFCC00";
+            buttonStart.style.border = "solid 3px #FFDB4D";
+            buttonStart.style.fontSize = "1.2em";
+        }
+        if(startClicked) {      // Stop button
+            buttonStart.style.background = "#ffffff";
+            buttonStart.style.fontSize = "1.2em";
+            buttonStart.style.border = "solid 3px #FFDB4D";
+        }
+    });
+
+    // Button Lap/Reset on mousedown/mouseup
+    buttonLapReset.addEventListener('mousedown', e => {
+        if(!mainTimerStartOrContinue) {
+            if(!startClicked) {     // Start button
+                buttonLapReset.style.background = "#FFCC00";
+                buttonLapReset.style.border = "solid 3px #FFCC00";
+                buttonLapReset.style.fontSize = "1.18em";
+            }
+            if(startClicked) {      // Stop button
+                buttonLapReset.style.background = "#F5F5F5";
+                buttonLapReset.style.fontSize = "1.21em";
+                buttonLapReset.style.border = "solid 3px #FFCC00";
+            }
+        }
+    });
+
+    buttonLapReset.addEventListener('mouseup', e => {
+        if(!mainTimerStartOrContinue) {
+            if(!startClicked) {     // Start button
+                buttonLapReset.style.background = "#FFCC00";
+                buttonLapReset.style.border = "solid 3px #FFDB4D";
+                buttonLapReset.style.fontSize = "1.2em";
+            }
+            if(startClicked) {      // Stop button
+                buttonLapReset.style.background = "#ffffff";
+                buttonLapReset.style.fontSize = "1.2em";
+                buttonLapReset.style.border = "solid 3px #FFDB4D";
+            }
+        }
+    });
+    
+
 
     // Lap/Reset button on load (before the Start button clicked for the first time)
     const lapColorOnStart = function () {
