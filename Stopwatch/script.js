@@ -6,6 +6,9 @@
 //     grey for laps:   #A3A3A3
 //     light yellow for 
 //     button hover     #FFDE5C
+//      /////////////////////////
+//     yellow button before hover: #FFDB4D
+//     yellow button on hover: #FFCC00 
 
 window.onload = function () {
     let hours = "0o";
@@ -18,8 +21,6 @@ window.onload = function () {
     let appendHours = document.getElementById("hours");
     let buttonStart = document.getElementById('button-start');
     let buttonLapReset = document.getElementById('button-lap-reset');
-    // let buttonReset = document.getElementById('button-reset');
-    // let buttonLap = document.getElementById('button-lap');
     let Interval ;
     let time = document.querySelector(".time");
     let hoursAndTens = document.querySelectorAll("span.hidden");
@@ -36,62 +37,40 @@ window.onload = function () {
 
         // Start button
         if(!startClicked) {
+            buttonLapResetStyling();
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
-            startClicked = true;
-
-            buttonStart.style.background = "#222222";
-            buttonStart.style.color = "#FFFFFF";
-            buttonStart.innerHTML = "Stop";
 
             // Laps
             lapsTimer();
 
-            // Laps styling
-            lapsStyling(); 
-            
-            // Button Lap/Reset Styling
-            // before first time press
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // This should be out of the button click! fix it!
-            if (mainTimerStartOrContinue) {
-                buttonLapReset.style.background = "#ffffff";
-                buttonLapReset.style.color = "#FFFFFF";
-                buttonLapReset.innerHTML = "Lap";
-            } 
-            // after first time press
-            else {
-                buttonLapReset.style.background = "#222222";
-                buttonLapReset.style.color = "#222222";
-                buttonLapReset.innerHTML = "Lap";
-            }
-            
+            // Styling
+            startStopButtonStyling();
 
+            lapsStyling();             
+
+            startClicked = true;
             mainTimerStartOrContinue = false;
-} 
+
+            
+        } 
         // Stop button
         else if(startClicked) {
             clearInterval(Interval);
-            startClicked = false;
-
-            buttonStart.style.background = "#FFCC02";
-            buttonStart.style.color = "#222222";
-            buttonStart.innerHTML = "Start";
 
             // Laps
             clearInterval(IntervalLaps);
 
-            // Button Lap/Reset Styling
-            buttonLapReset.style.background = "#FFCC02";
-            buttonLapReset.style.color = "#222222";
-            buttonLapReset.innerHTML = "Reset";
+            // Styling
+            startStopButtonStyling();
+            buttonLapResetStyling();
+
+            startClicked = false;
         }
 
         
 
     }
-
-    // After you finish with this, you'll need to change the name of the Lap button to Lap-Reset button (in your code)
   
     // Lap/Reset button
     buttonLapReset.onclick = function() {
@@ -158,77 +137,9 @@ window.onload = function () {
 
             mainTimerStartOrContinue = true;
 
-
+            lapColorOnStart();
         }
     }
-
-
-    // // Reset button
-    // buttonReset.onclick = function() {
-    //     // Reset Main Timer
-    //     clearInterval(Interval);
-    //     hours = "00";
-    //     minutes = "00";
-    //     tens = "00";
-    //     seconds = "00";
-    
-    //     appendMinutes.innerHTML = minutes;
-    //     appendTens.innerHTML = tens;
-    //     appendSeconds.innerHTML = seconds;
-    //     appendHours.innerHTML = hours;
-
-    //     // Reset Laps
-    //     clearInterval(IntervalLaps);
-    //     hoursLaps = "00";
-    //     minutesLaps = "00";
-    //     tensLaps = "00";
-    //     secondsLaps = "00";
-    
-    //     appendMinutesLaps.innerHTML = minutesLaps;
-    //     appendTensLaps.innerHTML = tensLaps;
-    //     appendSecondsLaps.innerHTML = secondsLaps;
-    //     appendHoursLaps.innerHTML = hoursLaps;
-
-    //     lapsCounter = 1;
-    //     appendLapsCounter.innerHTML = lapsCounter;
-
-    //     mainTimerStartOrContinue = true;
-
-    // }
-    
-    // // Lap button
-    // buttonLap.onclick = function() {
-
-    //     let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
-        
-    //     for(let i = 0; i < timeArrLaps.length; i++) {
-    //         if(timeArrLaps[i].toString().length === 1) {
-    //             timeArrLaps[i] = "0" + timeArrLaps[i].toString();
-    //         }
-    //     } 
-
-    //     // create a new div element
-    //     const newLapDiv = document.createElement("p");
-    //     newLapDiv.classList.add("lap");
-    //     newLapDiv.classList.add("lapNum" + lapsCounter);
-
-
-    //     newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
-
-    //     // add the newly created element and its content into the DOM
-    //     const currentDiv = document.querySelector("laps");
-    //     document.querySelector("#forPrependLaps").prepend(newLapDiv);
-
-    //     mainTimerStartOrContinue = true;
-    //     lapsTimer();
-    //     mainTimerStartOrContinue = false;
-
-    //     ++lapsCounter;
-    //     appendLapsCounter.innerHTML = lapsCounter;
-
-    //     // styling
-    //     lapsStyling();
-    // }
 
     
     function startTimer () {
@@ -266,6 +177,8 @@ window.onload = function () {
             appendHours.innerHTML = "0" + hours;
             minutes = 0;
             appendMinutes.innerHTML = "0" + 0;
+
+            // If hours num > 0, show hour time permanently (main timer)
             hoursAndTens[0].style.color = "#222222";
             hoursAndTens[1].style.color = "#222222";
         }
@@ -292,28 +205,130 @@ window.onload = function () {
         });
     }
 
+    // Start/Stop button
+    const startStopButtonStyling = function () {
+        if(!startClicked) {     // Start button
+            buttonStart.style.background = "#FFFFFF";
+            buttonStart.innerHTML = "Stop";
+            buttonStart.style.border = "solid 3px #ffdb4d"
+            buttonStart.style.color = "#EE0000";
+        }
+        if(startClicked) {      // Stop button
+            buttonStart.style.background = "#FFCC02";
+            buttonStart.innerHTML = "Start";
+            buttonStart.style.border = "solid 3px #FFCC02";
+            buttonStart.style.color = "#222222";
+
+        }
+    }
+
     // On hover for Start/Stop button
     buttonStart.onmouseover = function() { 
-        if(!startClicked) {
+        if(!startClicked) {     // Start button
             buttonStart.style.transition = "all 0.1s ease-in-out";
-            buttonStart.style.background = "#FFDE5C"  // Lighter yellow
+            buttonStart.style.background = "#FFCC00"
+            buttonStart.style.border = "solid 3px #FFCC00"
         }
-        if(startClicked) {
+        if(startClicked) {      // Stop button
             buttonStart.style.transition = "all 0.1s ease-in-out";
-            buttonStart.style.background = "#3D3D3D"  // Lighter black
+            buttonStart.style.background = "#ffffff" 
+            buttonStart.style.color = "#EE0000";
         }
     }
     
     buttonStart.onmouseout = function() {
-        if(!startClicked) {
+        if(!startClicked) {     // Start button
             buttonStart.style.transition = "all 0.4s ease-in-out";
-            buttonStart.style.background = "#FFCC02"  // Yellow
+            buttonStart.style.background = "#FFDB4D" 
+            buttonStart.style.border = "solid 3px #FFDB4D"
+            buttonStart.style.color = "#222222";
         }
-        if(startClicked) {
+        if(startClicked) {      // Stop button
             buttonStart.style.transition = "all 0.4s ease-in-out";
-            buttonStart.style.background = "#222222"  // Black
+            buttonStart.style.background = "#ffffff" 
+            buttonStart.style.color = "#222222";
         }
     }
+
+    buttonStart.onclick = function() {
+        // E0B400
+        if(!startClicked) {     // Start button
+            buttonStart.style.transition = "all 0.4s ease-in-out";
+            buttonStart.style.background = "#FFDB4D" 
+            buttonStart.style.border = "solid 3px #FFDB4D"
+            buttonStart.style.color = "#222222";
+        }
+        if(startClicked) {      // Stop button
+            buttonStart.style.transition = "all 0.4s ease-in-out";
+            buttonStart.style.background = "#ffffff" 
+            buttonStart.style.color = "#222222";
+        }
+    }
+
+    // Lap/Reset button on load (before the Start button clicked for the first time)
+    const lapColorOnStart = function () {
+        if (mainTimerStartOrContinue) {
+            buttonLapReset.style.background = "#ffffff";
+            buttonLapReset.style.color = "#EBEBEB";
+            buttonLapReset.innerHTML = "Lap";
+            buttonLapReset.style.border = "solid 3px #EBEBEB";
+            buttonLapReset.style.cursor = "default";
+        } 
+    }
+    lapColorOnStart();
+
+    // Lap/Reset button styling (after Start button is pressed)
+    const buttonLapResetStyling = function () {
+        if(!startClicked) {     // Lap button
+            buttonLapReset.style.background = "#ffffff";
+            buttonLapReset.style.color = "#222222";
+            buttonLapReset.innerHTML = "Lap";
+            buttonLapReset.style.cursor = "pointer";
+            buttonLapReset.style.border = "solid 3px #FFDB4D";
+        }
+        else {                  // Reset button
+            buttonLapReset.style.background = "#FFDB4D";
+            buttonLapReset.style.color = "#222222";
+            buttonLapReset.innerHTML = "Reset";
+            buttonLapReset.style.cursor = "pointer";
+            buttonLapReset.style.border = "solid 3px #FFDB4D";
+            // buttonLapReset.onmouseover();
+        }
+    }
+    
+    // On hover for Lap/Reset button
+    buttonLapReset.onmouseover = function() { 
+        if(!mainTimerStartOrContinue) {
+            if(!startClicked) {     // Reset button
+                buttonLapReset.style.transition = "all 0.1s ease-in-out";
+                buttonLapReset.style.background = "#FFCC00"
+                buttonLapReset.style.border = "solid 3px #FFCC00"
+            }
+            if(startClicked) {      // Lap button
+                buttonLapReset.style.transition = "all 0.1s ease-in-out";
+                buttonLapReset.style.background = "#ffffff" 
+                buttonLapReset.style.color = "#EE0000";
+            }
+        }   
+    }
+    
+    // Lap/Reset button out hover
+    buttonLapReset.onmouseout = function() {
+        if(!mainTimerStartOrContinue) {
+            if(!startClicked) {     // Reset button
+                buttonLapReset.style.transition = "all 0.4s ease-in-out";
+                buttonLapReset.style.background = "#FFDB4D" 
+                buttonLapReset.style.border = "solid 3px #FFDB4D"
+                buttonLapReset.style.color = "#222222";
+            }
+            if(startClicked) {      // Lap button
+                buttonLapReset.style.transition = "all 0.4s ease-in-out";
+                buttonLapReset.style.background = "#ffffff" 
+                buttonLapReset.style.color = "#222222";
+            }
+        }
+    }
+
 
     // styling of laps
     const lapsStyling = function () {
@@ -401,7 +416,7 @@ window.onload = function () {
     
 
     ////////////////////////////////////////////
-    // Laps funcitonality
+    // Laps functionality
     ///////////////////////////////////////////
 
     let hoursLaps = "0o";
