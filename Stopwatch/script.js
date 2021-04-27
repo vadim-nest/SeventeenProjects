@@ -11,10 +11,6 @@
 //     yellow button on hover : #FFD633
 //     yellow button on press : #FFCC00
 
-//  Old, needs to be removed
-//     yellow button before hover: #FFDB4D
-//     yellow button on hover: #FFCC00 
-
 window.onload = function () {
     let hours = "0o";
     let minutes = "0o";
