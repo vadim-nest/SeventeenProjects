@@ -16,19 +16,21 @@ window.onload = function () {
     let minutes = "0o";
     let seconds = "0o"; 
     let tens = "0o"; 
-    let appendTens = document.getElementById("tens")
-    let appendSeconds = document.getElementById("seconds")
-    let appendMinutes = document.getElementById("minutes");
-    let appendHours = document.getElementById("hours");
-    let buttonStart = document.getElementById('button-start');
-    let buttonLapReset = document.getElementById('button-lap-reset');
+    const appendTens = document.getElementById("tens")
+    const appendSeconds = document.getElementById("seconds")
+    const appendMinutes = document.getElementById("minutes");
+    const appendHours = document.getElementById("hours");
+    const buttonStart = document.getElementById('button-start');
+    const buttonLapReset = document.getElementById('button-lap-reset');
     let Interval ;
-    let time = document.querySelector(".time");
-    let hoursAndTens = document.querySelectorAll("span.hidden");
+    const time = document.querySelector(".time");
+    const hoursAndTens = document.querySelectorAll("span.hidden");
     let startClicked = false;
-    let appendLapsCounter = document.querySelector("#lapsCounter");
+    const appendLapsCounter = document.querySelector("#lapsCounter");
     let lapsCounter = 1;
     let mainTimerStartOrContinue = true;        // true if the main timer just starts from zero (bug fix, start button was causing laps timer to reset)
+    let flashSecInterval;
+    const secColor = document.querySelector("#seconds");
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
@@ -41,6 +43,8 @@ window.onload = function () {
             buttonLapResetStyling();
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
+            clearInterval(flashSecInterval);
+            secColor.style.color = "#EE0000";
 
             // Laps
             lapsTimer();
@@ -65,6 +69,9 @@ window.onload = function () {
             // Styling
             startStopButtonStyling();
             buttonLapResetStyling();
+
+            secColor.style.color = "#222222";
+            flashSecInterval = setInterval(flashSec, 1000);
 
             startClicked = false;
         }
@@ -120,6 +127,9 @@ window.onload = function () {
             appendTens.innerHTML = tens;
             appendSeconds.innerHTML = seconds;
             appendHours.innerHTML = hours;
+
+            clearInterval(flashSecInterval);
+            secColor.style.color = "#EE0000";
 
             // Reset Laps
             clearInterval(IntervalLaps);
@@ -206,12 +216,18 @@ window.onload = function () {
         });
     }
 
-    // Flashinbg red seconds when Stop is pressed
-    function flashSec() {
-        // timeoutID = window.setTimeout(window.alert, 2*1000, 'That was really slow!');
-        
-    }
+    // Flashing red seconds when Stop is pressed
+    let i = 0;
+    const flashSec = function() {
+        console.log("1");
 
+        const flashSecColor = ["#EE0000", "#222222"];
+        secColor.style.color = flashSecColor[i];
+        i = (i + 1) % flashSecColor.length;
+
+
+    }
+    
     // Start/Stop button
     const startStopButtonStyling = function () {
         if(!startClicked) {     // Start button
