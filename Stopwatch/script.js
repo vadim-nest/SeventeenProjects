@@ -30,7 +30,10 @@ window.onload = function () {
     let lapsCounter = 1;
     let mainTimerStartOrContinue = true;        // true if the main timer just starts from zero (bug fix, start button was causing laps timer to reset)
     let flashSecInterval;
+    // let flashSecLapInterval;
+    let firstLapHovered = false;
     const secColor = document.querySelector("#seconds");
+    const runningLapSeconds = document.querySelector("#secondsLaps");
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
@@ -70,7 +73,7 @@ window.onload = function () {
             startStopButtonStyling();
             buttonLapResetStyling();
 
-            secColor.style.color = "#222222";
+            // secColor.style.color = "#222222";
             flashSecInterval = setInterval(flashSec, 1000);
 
             startClicked = false;
@@ -219,13 +222,15 @@ window.onload = function () {
     // Flashing red seconds when Stop is pressed
     let i = 0;
     const flashSec = function() {
-        console.log("1");
 
-        const flashSecColor = ["#EE0000", "#222222"];
+        const flashSecColor = ["#222222", "#EE0000"];
         secColor.style.color = flashSecColor[i];
+
+        if(firstLapHovered) {
+            runningLapSeconds.style.color = flashSecColor[i];
+        }
+
         i = (i + 1) % flashSecColor.length;
-
-
     }
     
     // Start/Stop button
@@ -453,16 +458,14 @@ window.onload = function () {
         });
 
         // The top (running) lap
-        let runningLapSeconds = document.querySelector("#secondsLaps");
-        // let runningLapHoursDots = document.querySelector(".hiddenLaps");
-
         laps.item(0).onmouseover = function() {
             laps.item(0).style.transition = "all 0.1s ease-in-out";
             laps.item(0).style.color = "#222222"  // Black
 
             // Red for seconds
             runningLapSeconds.style.transition = "all 0.1s ease-in-out";
-            runningLapSeconds.style.color = "#EE0000";  // Red
+            runningLapSeconds.style.color = secColor.style.color;
+            firstLapHovered = true;
 
             runningLapHours.style.transition = "all 0.1s ease-in-out";
             runningLapHours.style.color = "#222222";
@@ -470,6 +473,9 @@ window.onload = function () {
             runningLapHoursDots.style.color = "#222222";
         }
         laps.item(0).onmouseout = function() {
+            // clearInterval(flashSecLap, 1000);
+            firstLapHovered = false;
+
             laps.item(0).style.transition = "all 0.4s ease-in-out";
             laps.item(0).style.color = "#A3A3A3";  // Grey for laps
 
