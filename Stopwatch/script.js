@@ -206,6 +206,12 @@ window.onload = function () {
         });
     }
 
+    // Flashinbg red seconds when Stop is pressed
+    function flashSec() {
+        // timeoutID = window.setTimeout(window.alert, 2*1000, 'That was really slow!');
+        
+    }
+
     // Start/Stop button
     const startStopButtonStyling = function () {
         if(!startClicked) {     // Start button
