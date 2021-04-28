@@ -30,10 +30,12 @@ window.onload = function () {
     let lapsCounter = 1;
     let mainTimerStartOrContinue = true;        // true if the main timer just starts from zero (bug fix, start button was causing laps timer to reset)
     let flashSecInterval;
-    // let flashSecLapInterval;
     let firstLapHovered = false;
     const secColor = document.querySelector("#seconds");
     const runningLapSeconds = document.querySelector("#secondsLaps");
+    const bestWorstLapArr = [];
+    let worstLap;
+    let bestLap;
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
@@ -47,6 +49,7 @@ window.onload = function () {
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
             clearInterval(flashSecInterval);
+            secColor.style.transition = "all 0.2s ease-in-out";
             secColor.style.color = "#EE0000";
 
             // Laps
@@ -72,6 +75,7 @@ window.onload = function () {
             // Styling
             startStopButtonStyling();
             buttonLapResetStyling();
+            lapsStyling();
 
             // secColor.style.color = "#222222";
             flashSecInterval = setInterval(flashSec, 1000);
@@ -101,8 +105,11 @@ window.onload = function () {
             newLapDiv.classList.add("lapNum" + lapsCounter);
     
     
-            newLapDiv.innerHTML = `Lap ${lapsCounter} - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
-    
+            newLapDiv.innerHTML = `<span class="lapWord${lapsCounter}">Lap ${lapsCounter}</span> - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
+            
+
+            
+
             // add the newly created element and its content into the DOM
             const currentDiv = document.querySelector("laps");
             document.querySelector("#forPrependLaps").prepend(newLapDiv);
@@ -111,11 +118,17 @@ window.onload = function () {
             lapsTimer();
             mainTimerStartOrContinue = false;
     
-            ++lapsCounter;
-            appendLapsCounter.innerHTML = lapsCounter;
+
     
             // styling
             lapsStyling();
+
+            // Calculating best and worst lap
+            let currentLapTime = timeArrLaps[0].toString() + timeArrLaps[1].toString() + timeArrLaps[2].toString() + timeArrLaps[3]
+            bestWorstLap(currentLapTime, (lapsCounter - 1));
+
+            ++lapsCounter;
+            appendLapsCounter.innerHTML = lapsCounter;
         } 
         // Reset button
         else if(!startClicked) {
@@ -132,7 +145,8 @@ window.onload = function () {
             appendHours.innerHTML = hours;
 
             clearInterval(flashSecInterval);
-            secColor.style.color = "#EE0000";
+            secColor.style.transition = "all 0.4s ease-in-out";
+            secColor.style.color = "#222222";
 
             // Reset Laps
             clearInterval(IntervalLaps);
@@ -207,7 +221,7 @@ window.onload = function () {
     // Changing hours and tens appearance (color) on hover
     time.onmouseover = function() {
         hoursAndTens.forEach(function(element) {
-            element.style.transition = "all 0.3s ease-in-out;";
+            element.style.transition = "all 0.2s ease-in-out;";
             element.style.color = "#222222"
         });
     }
@@ -223,10 +237,13 @@ window.onload = function () {
     let i = 0;
     const flashSec = function() {
 
+        secColor.style.transition = "none";
+
         const flashSecColor = ["#222222", "#EE0000"];
         secColor.style.color = flashSecColor[i];
 
         if(firstLapHovered) {
+            runningLapSeconds.style.transition = "none";
             runningLapSeconds.style.color = flashSecColor[i];
         }
 
@@ -368,7 +385,6 @@ window.onload = function () {
             buttonLapReset.innerHTML = "Reset";
             buttonLapReset.style.cursor = "pointer";
             buttonLapReset.style.border = "solid 3px #FFDB4D";
-            // buttonLapReset.onmouseover();
         }
     }
     
@@ -429,14 +445,22 @@ window.onload = function () {
         laps.forEach(element => {
 
             element.onmouseover = function() {
-                element.style.transition = "all 0.1s ease-in-out";
+                element.style.transition = "all 0.2s ease-in-out";
                 element.style.color = "#222222"  // Black
 
                 // Changing hours color on hover
                 let currentLapNum = currElementNum();
-                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.1s ease-in-out";
+                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
 
+                // Best/Worst Laps on hover
+                // document.querySelector(".lapWord" + bestLap);
+                // console.log(bestLap, currentLapNum);
+                /// DIDN'T FINISH HERE!!!
+                if (bestLap === parseInt(currentLapNum)) {
+                    document.querySelector(".lapNum" + currentLapNum + " .lapWord" + (bestLap + 1)).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapNum" + currentLapNum + " .lapWord" + (bestLap + 1)).style.color = "green";
+                }
             }
             element.onmouseout = function() {
                 element.style.transition = "all 0.4s ease-in-out";
@@ -446,6 +470,10 @@ window.onload = function () {
                 let currentLapNum = currElementNum();
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
+
+                // Changing Best/Worst Laps color out hover
+                document.querySelector(".lapWord" + bestLap).style.transition = "all 0.4s ease-in-out";
+                document.querySelector(".lapWord" + bestLap).style.color = "#A3A3A3";
             }
 
             // Calculating current element's lap number (currentLapNum)
@@ -459,17 +487,17 @@ window.onload = function () {
 
         // The top (running) lap
         laps.item(0).onmouseover = function() {
-            laps.item(0).style.transition = "all 0.1s ease-in-out";
+            laps.item(0).style.transition = "all 0.4s ease-in-out";
             laps.item(0).style.color = "#222222"  // Black
 
             // Red for seconds
-            runningLapSeconds.style.transition = "all 0.1s ease-in-out";
+            runningLapSeconds.style.transition = "all 0.2s ease-in-out";
             runningLapSeconds.style.color = secColor.style.color;
             firstLapHovered = true;
 
-            runningLapHours.style.transition = "all 0.1s ease-in-out";
+            runningLapHours.style.transition = "all 0.2s ease-in-out";
             runningLapHours.style.color = "#222222";
-            runningLapHoursDots.style.transition = "all 0.1s ease-in-out";
+            runningLapHoursDots.style.transition = "all 0.2s ease-in-out";
             runningLapHoursDots.style.color = "#222222";
         }
         laps.item(0).onmouseout = function() {
@@ -487,6 +515,8 @@ window.onload = function () {
             runningLapHoursDots.style.transition = "all 0.4s ease-in-out";
             runningLapHoursDots.style.color = "#ffffff";
         }
+
+
         
         
     }
@@ -565,6 +595,37 @@ window.onload = function () {
             appendMinutesLaps.innerHTML = "0" + 0;
 
         }
+    }
+
+
+    ////////////////////////////////////////////
+    // Best/Worst Lap
+    ///////////////////////////////////////////
+    const bestWorstLap = function (currentLapTime, lapNum) {
+        bestWorstLapArr.push(currentLapTime);
+        console.log(bestWorstLapArr);
+
+        if(bestWorstLapArr.length === 2) {
+            if (parseInt(bestWorstLapArr[0]) > parseInt(bestWorstLapArr[1])) {
+                worstLap = 1;
+                bestLap = 2;
+            } else {
+                worstLap = 2;
+                bestLap = 1;
+            }
+        }
+
+
+        if(parseInt(currentLapTime) > bestWorstLapArr[worstLap]) {
+            worstLap = lapNum + 1;
+        } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap]) {
+            bestLap = lapNum + 1;
+        }
+
+        console.log(bestLap);
+
+        lapsStyling();
+
     }
 
 
