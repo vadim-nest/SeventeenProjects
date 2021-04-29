@@ -461,16 +461,18 @@ window.onload = function () {
                     console.log(bestLap);
                     document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
-                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-out";
                     document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                } else if (worstLap === parseInt(currentLapNum)) {
+                    document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
+                    document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-out";
+                    document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
                 } else {
                     // All the other laps are (the Lap word itself)
                     document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
-                    // document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
                 }
-                // console.log(getComputedStyle(previousLapHover, null).getPropertyValue("color"));
-                // previousLapHover.removeProperty("#222222");
             }
             element.onmouseout = function() {
                 element.style.transition = "all 0.4s ease-in-out";
@@ -481,11 +483,17 @@ window.onload = function () {
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
 
-                // Changing Best/Worst Laps color out hover
+                // Changing Best Laps color out hover
                 document.querySelector(".lapWord" + bestLap).style.transition = "all 0.4s ease-in-out";
                 document.querySelector(".lapWord" + bestLap).style.color = "#A3A3A3";
                 document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
                 document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
+
+                // Changing Worst Laps color out hover
+                document.querySelector(".lapWord" + worstLap).style.transition = "all 0.4s ease-in-out";
+                document.querySelector(".lapWord" + worstLap).style.color = "#A3A3A3";
+                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
+                document.querySelector(".lapWord" + worstLap).style.borderBottom = "none";
 
                 document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                 document.querySelector(".lapWord" + currentLapNum).style.color = "#A3A3A3";
