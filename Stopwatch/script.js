@@ -36,6 +36,7 @@ window.onload = function () {
     const bestWorstLapArr = [];
     let worstLap;
     let bestLap;
+    let previousLapHover
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
@@ -455,14 +456,21 @@ window.onload = function () {
 
                 // Best/Worst Laps on hover
                 /// DIDN'T FINISH HERE!!!
-                console.log("bestLap: " + bestLap);
-                console.log("currentLapNum: " + currentLapNum);
                 if (bestLap === parseInt(currentLapNum)) {
                     console.log(document.querySelector(".lapWord" + bestLap));
                     console.log(bestLap);
                     document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
-                    document.querySelector(".lapWord" + bestLap).style.color = "green";
+                    document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
+                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                } else {
+                    // All the other laps are (the Lap word itself)
+                    document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
+                    // document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
                 }
+                // console.log(getComputedStyle(previousLapHover, null).getPropertyValue("color"));
+                // previousLapHover.removeProperty("#222222");
             }
             element.onmouseout = function() {
                 element.style.transition = "all 0.4s ease-in-out";
@@ -476,6 +484,11 @@ window.onload = function () {
                 // Changing Best/Worst Laps color out hover
                 document.querySelector(".lapWord" + bestLap).style.transition = "all 0.4s ease-in-out";
                 document.querySelector(".lapWord" + bestLap).style.color = "#A3A3A3";
+                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
+                document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
+
+                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                document.querySelector(".lapWord" + currentLapNum).style.color = "#A3A3A3";
             }
 
             // Calculating current element's lap number (currentLapNum)
@@ -486,10 +499,8 @@ window.onload = function () {
                 do {
                     currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
                     currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                    console.log("Substring: " + currentLapNumTempArr[1]);
                 } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
                 currentLapNum = parseInt(currentLapNum);
-                console.log(currentLapNum);
                 return currentLapNum;
             }
         });
@@ -627,8 +638,10 @@ window.onload = function () {
         console.log(lapNum);
 
         if(parseInt(currentLapTime) > bestWorstLapArr[worstLap - 1]) {
+            previousLapHover = document.querySelector(".lapWord" + worstLap);
             worstLap = lapNum;
         } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap - 1]) {
+            previousLapHover = document.querySelector(".lapWord" + bestLap);
             bestLap = lapNum;
         }
 
