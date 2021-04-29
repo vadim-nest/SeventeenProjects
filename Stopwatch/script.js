@@ -125,7 +125,7 @@ window.onload = function () {
 
             // Calculating best and worst lap
             let currentLapTime = timeArrLaps[0].toString() + timeArrLaps[1].toString() + timeArrLaps[2].toString() + timeArrLaps[3]
-            bestWorstLap(currentLapTime, (lapsCounter - 1));
+            bestWorstLap(currentLapTime, lapsCounter);
 
             ++lapsCounter;
             appendLapsCounter.innerHTML = lapsCounter;
@@ -454,12 +454,14 @@ window.onload = function () {
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
 
                 // Best/Worst Laps on hover
-                // document.querySelector(".lapWord" + bestLap);
-                // console.log(bestLap, currentLapNum);
                 /// DIDN'T FINISH HERE!!!
+                console.log("bestLap: " + bestLap);
+                console.log("currentLapNum: " + currentLapNum);
                 if (bestLap === parseInt(currentLapNum)) {
-                    document.querySelector(".lapNum" + currentLapNum + " .lapWord" + (bestLap + 1)).style.transition = "all 0.2s ease-in-out";
-                    document.querySelector(".lapNum" + currentLapNum + " .lapWord" + (bestLap + 1)).style.color = "green";
+                    console.log(document.querySelector(".lapWord" + bestLap));
+                    console.log(bestLap);
+                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".lapWord" + bestLap).style.color = "green";
                 }
             }
             element.onmouseout = function() {
@@ -480,7 +482,14 @@ window.onload = function () {
             const currElementNum = function () {
                 let currentLapClasses = element.getAttribute("class");  // returns a string
                 let currentLapNumTempArr = currentLapClasses.split("lapNum");
-                let currentLapNum = currentLapNumTempArr[1].toString().charAt(0);
+                let currentLapNum = "";
+                do {
+                    currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                    currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+                    console.log("Substring: " + currentLapNumTempArr[1]);
+                } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+                currentLapNum = parseInt(currentLapNum);
+                console.log(currentLapNum);
                 return currentLapNum;
             }
         });
@@ -615,11 +624,12 @@ window.onload = function () {
             }
         }
 
+        console.log(lapNum);
 
-        if(parseInt(currentLapTime) > bestWorstLapArr[worstLap]) {
-            worstLap = lapNum + 1;
-        } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap]) {
-            bestLap = lapNum + 1;
+        if(parseInt(currentLapTime) > bestWorstLapArr[worstLap - 1]) {
+            worstLap = lapNum;
+        } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap - 1]) {
+            bestLap = lapNum;
         }
 
         console.log(bestLap);
