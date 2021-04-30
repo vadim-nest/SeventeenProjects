@@ -36,13 +36,21 @@ window.onload = function () {
     const bestWorstLapArr = [];
     let worstLap;
     let bestLap;
-    let previousLapHover
+    // let previousLapHover;
+    let stopWatchCounter = 1;
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
   
     // Start/Stop button
     buttonStart.onclick = function() {
+
+        // Create new <p> #forPrependLaps
+        // Test with .append() method
+        let divTest = document.createElement("div");
+        divTest.classList.add("divTesting");
+        document.querySelector(".laps").append(divTest);
+        document.querySelector(".divTesting").innerHTML = "This is the testing div";
 
         // Start button
         if(!startClicked) {
@@ -92,6 +100,8 @@ window.onload = function () {
     buttonLapReset.onclick = function() {
         // Lap button
         if(startClicked) {
+
+            // Changing number from 1 to 2 digits format
             let timeArrLaps = [hoursLaps, minutesLaps, secondsLaps, tensLaps];
         
             for(let i = 0; i < timeArrLaps.length; i++) {
@@ -105,14 +115,10 @@ window.onload = function () {
             newLapDiv.classList.add("lap");
             newLapDiv.classList.add("lapNum" + lapsCounter);
     
-    
             newLapDiv.innerHTML = `<span class="lapWord${lapsCounter}">Lap ${lapsCounter}</span> - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
             
-
-            
-
             // add the newly created element and its content into the DOM
-            const currentDiv = document.querySelector("laps");
+            // const currentDiv = document.querySelector("laps");
             document.querySelector("#forPrependLaps").prepend(newLapDiv);
     
             mainTimerStartOrContinue = true;
@@ -120,7 +126,6 @@ window.onload = function () {
             mainTimerStartOrContinue = false;
     
 
-    
             // styling
             lapsStyling();
 
@@ -133,12 +138,28 @@ window.onload = function () {
         } 
         // Reset button
         else if(!startClicked) {
+            
+            // Creating array with reset timer number with 2 digits format
+            let timeArrMain = [hours, minutes, seconds, tens];
+        
+            for(let i = 0; i < timeArrMain.length; i++) {
+                if(timeArrMain[i].toString().length === 1) {
+                    timeArrMain[i] = "0" + timeArrMain[i].toString();
+                }
+            }
+            // Save the Main Time below (with laps)
+            const newStopWDiv = document.createElement("h3");
+            newStopWDiv.classList.add("stopwatch");
+            newStopWDiv.innerHTML = `${timeArrMain[0]}:${timeArrMain[1]}:${timeArrMain[2]}.${timeArrMain[3]}`;
+            document.querySelector("#forPrependLaps").prepend(newStopWDiv);
+
+
             // Reset Main Timer
             clearInterval(Interval);
             hours = "00";
             minutes = "00";
-            tens = "00";
             seconds = "00";
+            tens = "00";
 
             appendMinutes.innerHTML = minutes;
             appendTens.innerHTML = tens;
@@ -308,7 +329,7 @@ window.onload = function () {
         }
         if(startClicked) {      // Stop button
             buttonStart.style.background = "#F5F5F5";
-            buttonStart.style.fontSize = "1.21em";
+            buttonStart.style.fontSize = "1.18em";
             buttonStart.style.border = "solid 3px #FFCC00";
         }
     });
@@ -336,7 +357,7 @@ window.onload = function () {
             }
             if(startClicked) {      // Stop button
                 buttonLapReset.style.background = "#F5F5F5";
-                buttonLapReset.style.fontSize = "1.21em";
+                buttonLapReset.style.fontSize = "1.18em";
                 buttonLapReset.style.border = "solid 3px #FFCC00";
             }
         }
@@ -455,10 +476,7 @@ window.onload = function () {
                 document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
 
                 // Best/Worst Laps on hover
-                /// DIDN'T FINISH HERE!!!
                 if (bestLap === parseInt(currentLapNum)) {
-                    console.log(document.querySelector(".lapWord" + bestLap));
-                    console.log(bestLap);
                     document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
                     document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-out";
@@ -631,7 +649,6 @@ window.onload = function () {
     ///////////////////////////////////////////
     const bestWorstLap = function (currentLapTime, lapNum) {
         bestWorstLapArr.push(currentLapTime);
-        console.log(bestWorstLapArr);
 
         if(bestWorstLapArr.length === 2) {
             if (parseInt(bestWorstLapArr[0]) > parseInt(bestWorstLapArr[1])) {
@@ -643,17 +660,13 @@ window.onload = function () {
             }
         }
 
-        console.log(lapNum);
-
         if(parseInt(currentLapTime) > bestWorstLapArr[worstLap - 1]) {
-            previousLapHover = document.querySelector(".lapWord" + worstLap);
+            // previousLapHover = document.querySelector(".lapWord" + worstLap);
             worstLap = lapNum;
         } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap - 1]) {
-            previousLapHover = document.querySelector(".lapWord" + bestLap);
+            // previousLapHover = document.querySelector(".lapWord" + bestLap);
             bestLap = lapNum;
         }
-
-        console.log(bestLap);
 
         lapsStyling();
 
