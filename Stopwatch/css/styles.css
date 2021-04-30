@@ -17,6 +17,13 @@ body {
   color: #222222;
   text-align: center;
 }
+.runningLap {
+  width: 800px;
+  margin: 30px auto;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.4em;
+}
 .laps {
   width: 800px;
   margin: 30px auto;
@@ -26,19 +33,21 @@ body {
 }
 .lap {
   width: 800px;
-  /* margin: 3px auto; */
 }
-/* Probably you can remove next rule, because it's being overwritten by js */
-/* .hiddenhoursLaps,
-.hoursDotsLaps {
-  color: #ffffff;
-} */
-h1,
-h2,
-h3 {
+h1 {
   font-family: "Montserrat", sans-serif;
   font-weight: 100;
   font-size: 2.6em;
+}
+h2 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  font-size: 1.5em;
+}
+h3 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 100;
+  font-size: 30px;
 }
 #minutes,
 #seconds {

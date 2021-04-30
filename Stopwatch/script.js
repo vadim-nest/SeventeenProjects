@@ -45,13 +45,13 @@ window.onload = function () {
     // Start/Stop button
     buttonStart.onclick = function() {
 
-        // Create new <p> #forPrependLaps
-        // Test with .append() method
-        let divTest = document.createElement("div");
-        divTest.classList.add("divTesting");
-        document.querySelector(".laps").append(divTest);
-        document.querySelector(".divTesting").innerHTML = "This is the testing div";
-
+        // Create new 
+        if (mainTimerStartOrContinue) {
+            let divTest = document.createElement("div");
+            divTest.classList.add("stopWatch" + stopWatchCounter);
+            document.querySelector(".laps").prepend(divTest);
+            // document.querySelector(".stopWatch" + stopWatchCounter).innerHTML = "This is the testing div";
+        }
         // Start button
         if(!startClicked) {
             buttonLapResetStyling();
@@ -119,7 +119,7 @@ window.onload = function () {
             
             // add the newly created element and its content into the DOM
             // const currentDiv = document.querySelector("laps");
-            document.querySelector("#forPrependLaps").prepend(newLapDiv);
+            document.querySelector(".stopWatch" + stopWatchCounter).prepend(newLapDiv);
     
             mainTimerStartOrContinue = true;
             lapsTimer();
@@ -151,8 +151,9 @@ window.onload = function () {
             const newStopWDiv = document.createElement("h3");
             newStopWDiv.classList.add("stopwatch");
             newStopWDiv.innerHTML = `${timeArrMain[0]}:${timeArrMain[1]}:${timeArrMain[2]}.${timeArrMain[3]}`;
-            document.querySelector("#forPrependLaps").prepend(newStopWDiv);
+            document.querySelector(".stopWatch" + stopWatchCounter).prepend(newStopWDiv);
 
+            stopWatchCounter++;
 
             // Reset Main Timer
             clearInterval(Interval);
@@ -388,6 +389,8 @@ window.onload = function () {
             buttonLapReset.innerHTML = "Lap";
             buttonLapReset.style.border = "solid 3px #EBEBEB";
             buttonLapReset.style.cursor = "default";
+
+            document.querySelector(".runningLap").style.color = "#ffffff";
         } 
     }
     lapColorOnStart();
@@ -451,6 +454,7 @@ window.onload = function () {
         let runningLapHoursDots = document.querySelector(".dotsLaps");
 
         document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
+        document.querySelector(".runningLap").style.color = "#A3A3A3";
 
         const laps = document.querySelectorAll("p.lap");
 
