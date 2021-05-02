@@ -33,7 +33,7 @@ window.onload = function () {
     let firstLapHovered = false;
     const secColor = document.querySelector("#seconds");
     const runningLapSeconds = document.querySelector("#secondsLaps");
-    const bestWorstLapArr = [];
+    let bestWorstLapArr = [];
     let worstLap;
     let bestLap;
     // let previousLapHover;
@@ -47,9 +47,10 @@ window.onload = function () {
 
         // Create new 
         if (mainTimerStartOrContinue) {
-            let divTest = document.createElement("div");
-            divTest.classList.add("stopWatch" + stopWatchCounter);
-            document.querySelector(".laps").prepend(divTest);
+            let divStopwatch = document.createElement("div");
+            divStopwatch.classList.add("stopWatch" + stopWatchCounter);
+            divStopwatch.classList.add("allStopWatches");
+            document.querySelector(".laps").prepend(divStopwatch);
             // document.querySelector(".stopWatch" + stopWatchCounter).innerHTML = "This is the testing div";
         }
         // Start button
@@ -153,7 +154,9 @@ window.onload = function () {
             newStopWDiv.innerHTML = `${timeArrMain[0]}:${timeArrMain[1]}:${timeArrMain[2]}.${timeArrMain[3]}`;
             document.querySelector(".stopWatch" + stopWatchCounter).prepend(newStopWDiv);
 
-            stopWatchCounter++;
+            // Save Best/Worst time for each Stopwatch
+            document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + bestLap).classList.add("bestLap");
+            document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + worstLap).classList.add("worstLap");
 
             // Reset Main Timer
             clearInterval(Interval);
@@ -171,7 +174,7 @@ window.onload = function () {
             secColor.style.transition = "all 0.4s ease-in-out";
             secColor.style.color = "#222222";
 
-            // Reset Laps
+            // Reset Laps Timer
             clearInterval(IntervalLaps);
             hoursLaps = "00";
             minutesLaps = "00";
@@ -186,8 +189,14 @@ window.onload = function () {
             lapsCounter = 1;
             appendLapsCounter.innerHTML = lapsCounter;
 
-            mainTimerStartOrContinue = true;
+            // Save Best/Worst Lap for every Stopwatch
+            document.querySelector(".stopWatch" + stopWatchCounter + " .lapWord" + bestLap).classList.add("bestLap");
+            document.querySelector(".stopWatch" + stopWatchCounter + " .lapWord" + worstLap).classList.add("worstLap");
 
+            bestWorstLapArr = [];
+
+            mainTimerStartOrContinue = true;
+            stopWatchCounter++;
             lapColorOnStart();
         }
     }
@@ -237,9 +246,133 @@ window.onload = function () {
     }
 
 
+    ////////////////////////////////////////////
+    // Laps functionality
+    ///////////////////////////////////////////
+
+    let hoursLaps = "0o";
+    let minutesLaps = "0o";
+    let secondsLaps = "0o"; 
+    let tensLaps = "0o"; 
+    let IntervalLaps ;
+    let appendTensLaps = document.getElementById("tensLaps");
+    let appendSecondsLaps = document.getElementById("secondsLaps")
+    let appendMinutesLaps = document.getElementById("minutesLaps");
+    let appendHoursLaps = document.getElementById("hoursLaps");
+
+    const lapsTimer = function () {
+
+        // Set lap timer to zeroes (reset lap timer)
+        if(mainTimerStartOrContinue) {
+            clearInterval(IntervalLaps);
+            hoursLaps = "00";
+            minutesLaps = "00";
+            secondsLaps = "00";
+            tensLaps = "00";
+
+            appendHoursLaps.innerHTML = hoursLaps;
+            appendMinutesLaps.innerHTML = minutesLaps;
+            appendSecondsLaps.innerHTML = secondsLaps;
+            appendTensLaps.innerHTML = tensLaps;
+        }
+        
+        // Start lap timer
+        clearInterval(IntervalLaps);
+        IntervalLaps = setInterval(startTimerForLaps, 10);
+
+    };
+     
+    function startTimerForLaps () {
+        tensLaps++; 
+      
+        if(tensLaps <= 9){
+            appendTensLaps.innerHTML = "0" + tensLaps;
+        }
+      
+        if (tensLaps > 9){
+            appendTensLaps.innerHTML = tensLaps;
+        
+        } 
+      
+        if (tensLaps > 99) {
+            secondsLaps++;
+            appendSecondsLaps.innerHTML = "0" + secondsLaps;
+            tensLaps = 0;
+            appendTensLaps.innerHTML = "0" + 0;
+        }
+      
+        if (secondsLaps > 9){
+            appendSecondsLaps.innerHTML = secondsLaps;
+        }
+
+        if (secondsLaps > 59) {
+            minutesLaps++;
+            appendMinutesLaps.innerHTML = "0" + minutesLaps;
+            secondsLaps = 0;
+            appendSecondsLaps.innerHTML = "0" + 0;
+        }
+
+        if (minutesLaps > 59) {
+            hoursLaps++;
+            appendHoursLaps.innerHTML = "0" + hoursLaps;
+            minutesLaps = 0;
+            appendMinutesLaps.innerHTML = "0" + 0;
+
+        }
+    }
+
+
+    ////////////////////////////////////////////
+    // Best/Worst Lap
+    ///////////////////////////////////////////
+    const bestWorstLap = function (currentLapTime, lapNum) {
+        bestWorstLapArr.push(currentLapTime);
+
+        if(bestWorstLapArr.length === 2) {
+            if (parseInt(bestWorstLapArr[0]) > parseInt(bestWorstLapArr[1])) {
+                worstLap = 1;
+                bestLap = 2;
+            } else {
+                worstLap = 2;
+                bestLap = 1;
+            }
+        }
+
+        if(parseInt(currentLapTime) > bestWorstLapArr[worstLap - 1]) {
+            // previousLapHover = document.querySelector(".lapWord" + worstLap);
+            worstLap = lapNum;
+        } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap - 1]) {
+            // previousLapHover = document.querySelector(".lapWord" + bestLap);
+            bestLap = lapNum;
+        }
+
+        lapsStyling();
+
+        console.log(bestWorstLapArr);
+
+    }
+
+
     ///////////////////////////////////////
-    // Styling
+    // BAD FIXES
     //////////////////////////////////////
+
+    // Bad fix of the first hover on time
+    hoursAndTens.forEach(function(element) {
+        element.style.transition = "all 0.4s ease-in-out";
+        element.style.color = "#FFFFFF"
+    });
+
+    // Bad fix. My stopwatch wouldn't start without resetting it first. So I added these few lines from reset from the reset button
+    hours = "00";
+    minutes = "00";
+    tens = "00";
+    seconds = "00";
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    // STYLING
+    /////////////////////////////////////////////////////////////////////////////
 
     // Changing hours and tens appearance (color) on hover
     time.onmouseover = function() {
@@ -380,7 +513,6 @@ window.onload = function () {
     });
     
 
-
     // Lap/Reset button on load (before the Start button clicked for the first time)
     const lapColorOnStart = function () {
         if (mainTimerStartOrContinue) {
@@ -462,78 +594,124 @@ window.onload = function () {
         //  White color for hours in laps on page load, starting with second lap
         runningLapHours.style.color = "#ffffff";
         runningLapHoursDots.style.color = "#ffffff";
+
         if (laps.length > 1) {
             document.querySelector(".hoursAndDotsLaps").style.color = "#ffffff"; 
         }
 
         
         // All the other laps (except the top one)
-        laps.forEach(element => {
+        const stopwatches = document.querySelectorAll(".allStopWatches");
+        console.log(stopwatches);
 
-            element.onmouseover = function() {
-                element.style.transition = "all 0.2s ease-in-out";
-                element.style.color = "#222222"  // Black
+        stopwatches.forEach(elementSW => {
+            elementSW.onmouseover = function() {
+                console.log(elementSW.classList);
+                let currentSWNum = currElementSWNum();
 
-                // Changing hours color on hover
-                let currentLapNum = currElementNum();
-                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
-                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
+                laps.forEach(element => {
+                
+                    element.onmouseover = function() {
+                        
+        
+                        //// didn't finish here
+                        console.log(element);
+                        console.log(elementSW.classList);
+        
+        
+                        element.style.transition = "all 0.2s ease-in-out";
+                        element.style.color = "#222222"  // Black
+        
+                        // Changing hours color on hover
+                        let currentLapNum = currElementNum();
+                        
+                        console.log(currentLapNum);
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
+        
+                        // Best/Worst Laps on hover
+                        // This is incorrect, you need to change
+                        if(element.classList.contains(".bestLap")) {
+                            document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                            document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
+                            document.querySelector(".lapWord" + bestLap).style.transition = "all 0.1s ease-out";
+                            document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                        }
 
-                // Best/Worst Laps on hover
-                if (bestLap === parseInt(currentLapNum)) {
-                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
-                    document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
-                    document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-out";
-                    document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
-                } else if (worstLap === parseInt(currentLapNum)) {
-                    document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
-                    document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
-                    document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-out";
-                    document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
-                } else {
-                    // All the other laps are (the Lap word itself)
-                    document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
-                    document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
-                }
+                        // For the laps of timer that didn't finish yet (try to combine them with the ones that finished)
+                        if(currentSWNum === stopWatchCounter) {
+                            if (bestLap === parseInt(currentLapNum)) {
+                                document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                                document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
+                                document.querySelector(".lapWord" + bestLap).style.transition = "all 0.1s ease-out";
+                                document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                            } else if (worstLap === parseInt(currentLapNum)) {
+                                document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
+                                document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
+                                document.querySelector(".lapWord" + worstLap).style.transition = "all 0.1s ease-out";
+                                document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
+                            } else {
+                                // All the other laps are (the Lap word itself)
+                                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                                document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
+                            }
+                        }
+                    }
+                    element.onmouseout = function() {
+                        element.style.transition = "all 0.4s ease-in-out";
+                        element.style.color = "#A3A3A3";  // Grey for laps
+        
+                        // Changing hours color out hover
+                        let currentLapNum = currElementNum();
+                        let currentSWNum = currElementSWNum();
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
+                        
+                        // You have a problem here. When you have one lap and one running lap, you get an error with bestlap
+                        // Changing Best Laps color out hover
+                        document.querySelector(".lapWord" + bestLap).style.transition = "all 0.4s ease-in-out";
+                        document.querySelector(".lapWord" + bestLap).style.color = "#A3A3A3";
+                        document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
+                        document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
+        
+                        // Changing Worst Laps color out hover
+                        document.querySelector(".lapWord" + worstLap).style.transition = "all 0.4s ease-in-out";
+                        document.querySelector(".lapWord" + worstLap).style.color = "#A3A3A3";
+                        document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
+                        document.querySelector(".lapWord" + worstLap).style.borderBottom = "none";
+        
+                        document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                        document.querySelector(".lapWord" + currentLapNum).style.color = "#A3A3A3";
+                    }
+        
+                    // Calculating current element's lap number (currentLapNum)
+                    const currElementNum = function () {
+                        let currentLapClasses = element.getAttribute("class");  // returns a string
+                        let currentLapNumTempArr = currentLapClasses.split("lapNum");
+                        let currentLapNum = "";
+                        do {
+                            currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                            currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+                        } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+                        currentLapNum = parseInt(currentLapNum);
+                        return currentLapNum;
+                    }
+                });
             }
-            element.onmouseout = function() {
-                element.style.transition = "all 0.4s ease-in-out";
-                element.style.color = "#A3A3A3";  // Grey for laps
-
-                // Changing hours color out hover
-                let currentLapNum = currElementNum();
-                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
-
-                // Changing Best Laps color out hover
-                document.querySelector(".lapWord" + bestLap).style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".lapWord" + bestLap).style.color = "#A3A3A3";
-                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
-                document.querySelector(".lapWord" + bestLap).style.borderBottom = "none";
-
-                // Changing Worst Laps color out hover
-                document.querySelector(".lapWord" + worstLap).style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".lapWord" + worstLap).style.color = "#A3A3A3";
-                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
-                document.querySelector(".lapWord" + worstLap).style.borderBottom = "none";
-
-                document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
-                document.querySelector(".lapWord" + currentLapNum).style.color = "#A3A3A3";
-            }
-
-            // Calculating current element's lap number (currentLapNum)
-            const currElementNum = function () {
-                let currentLapClasses = element.getAttribute("class");  // returns a string
-                let currentLapNumTempArr = currentLapClasses.split("lapNum");
-                let currentLapNum = "";
+            // Calculating current element's Stopwatch number (currentLapNum)
+            const currElementSWNum = function () {
+                let currentSWClasses = elementSW.getAttribute("class");  // returns a string
+                let currentSWNumTempArr = currentSWClasses.split("stopWatch");
+                let currentSWNum = "";
                 do {
-                    currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
-                    currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
-                currentLapNum = parseInt(currentLapNum);
-                return currentLapNum;
+                    currentSWNum = currentSWNum + currentSWNumTempArr[1].toString().charAt(0);
+                    currentSWNumTempArr[1] = currentSWNumTempArr[1].toString().substring(1);
+                } while(currentSWNumTempArr[1].toString().charAt(0) == parseInt(currentSWNumTempArr[1].toString().charAt(0)));
+                currentSWNum = parseInt(currentSWNum);
+                return currentSWNum;
             }
         });
+        
 
         // The top (running) lap
         laps.item(0).onmouseover = function() {
@@ -572,126 +750,7 @@ window.onload = function () {
     }
     
 
-    ////////////////////////////////////////////
-    // Laps functionality
-    ///////////////////////////////////////////
-
-    let hoursLaps = "0o";
-    let minutesLaps = "0o";
-    let secondsLaps = "0o"; 
-    let tensLaps = "0o"; 
-    let IntervalLaps ;
-    let appendTensLaps = document.getElementById("tensLaps");
-    let appendSecondsLaps = document.getElementById("secondsLaps")
-    let appendMinutesLaps = document.getElementById("minutesLaps");
-    let appendHoursLaps = document.getElementById("hoursLaps");
-
-    const lapsTimer = function () {
-
-        // Set lap timer to zeroes (reset lap timer)
-        if(mainTimerStartOrContinue) {
-            clearInterval(IntervalLaps);
-            hoursLaps = "00";
-            minutesLaps = "00";
-            secondsLaps = "00";
-            tensLaps = "00";
-
-            appendHoursLaps.innerHTML = hoursLaps;
-            appendMinutesLaps.innerHTML = minutesLaps;
-            appendSecondsLaps.innerHTML = secondsLaps;
-            appendTensLaps.innerHTML = tensLaps;
-        }
-        
-        // Start lap timer
-        clearInterval(IntervalLaps);
-        IntervalLaps = setInterval(startTimerForLaps, 10);
-
-    };
-     
-    function startTimerForLaps () {
-        tensLaps++; 
-      
-        if(tensLaps <= 9){
-            appendTensLaps.innerHTML = "0" + tensLaps;
-        }
-      
-        if (tensLaps > 9){
-            appendTensLaps.innerHTML = tensLaps;
-        
-        } 
-      
-        if (tensLaps > 99) {
-            secondsLaps++;
-            appendSecondsLaps.innerHTML = "0" + secondsLaps;
-            tensLaps = 0;
-            appendTensLaps.innerHTML = "0" + 0;
-        }
-      
-        if (secondsLaps > 9){
-            appendSecondsLaps.innerHTML = secondsLaps;
-        }
-
-        if (secondsLaps > 59) {
-            minutesLaps++;
-            appendMinutesLaps.innerHTML = "0" + minutesLaps;
-            secondsLaps = 0;
-            appendSecondsLaps.innerHTML = "0" + 0;
-        }
-
-        if (minutesLaps > 59) {
-            hoursLaps++;
-            appendHoursLaps.innerHTML = "0" + hoursLaps;
-            minutesLaps = 0;
-            appendMinutesLaps.innerHTML = "0" + 0;
-
-        }
-    }
-
-
-    ////////////////////////////////////////////
-    // Best/Worst Lap
-    ///////////////////////////////////////////
-    const bestWorstLap = function (currentLapTime, lapNum) {
-        bestWorstLapArr.push(currentLapTime);
-
-        if(bestWorstLapArr.length === 2) {
-            if (parseInt(bestWorstLapArr[0]) > parseInt(bestWorstLapArr[1])) {
-                worstLap = 1;
-                bestLap = 2;
-            } else {
-                worstLap = 2;
-                bestLap = 1;
-            }
-        }
-
-        if(parseInt(currentLapTime) > bestWorstLapArr[worstLap - 1]) {
-            // previousLapHover = document.querySelector(".lapWord" + worstLap);
-            worstLap = lapNum;
-        } else if (parseInt(currentLapTime) < bestWorstLapArr[bestLap - 1]) {
-            // previousLapHover = document.querySelector(".lapWord" + bestLap);
-            bestLap = lapNum;
-        }
-
-        lapsStyling();
-
-    }
-
-
-    ///////////////////////////////////////
-    // BAD FIXES
-    //////////////////////////////////////
-
-    // Bad fix of the first hover on time
-    hoursAndTens.forEach(function(element) {
-        element.style.transition = "all 0.4s ease-in-out";
-        element.style.color = "#FFFFFF"
-    });
-
-    // Bad fix. My stopwatch wouldn't start without resetting it first. So I added these few lines from reset from the reset button
-    hours = "00";
-    minutes = "00";
-    tens = "00";
-    seconds = "00";
+   
     
 
 
