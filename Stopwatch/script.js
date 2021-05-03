@@ -622,18 +622,16 @@ window.onload = function () {
                 document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
 
                 // Best/Worst Laps on hover
+                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                 if(element.classList.contains("bestLap")) {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#68A357";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #68A357";
                 } else if(element.classList.contains("worstLap")) {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#EE0000";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #EE0000";
                 } else {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
                     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#222222";
                 }
 
@@ -656,6 +654,7 @@ window.onload = function () {
                     }
                 }
             }
+
             element.onmouseout = function() {
                 element.style.transition = "all 0.4s ease-in-out";
                 element.style.color = "#A3A3A3";  // Grey for laps
@@ -685,18 +684,8 @@ window.onload = function () {
                 currentLapNum = parseInt(currentLapNum);
                 return currentLapNum;
             }
-            // // Calculating current element's Stopwatch number (currentLapNum)
-            // const currElementSWNum = function () {
-            //     let currentSWClasses = elementSW.getAttribute("class");  // returns a string
-            //     let currentSWNumTempArr = currentSWClasses.split("stopWatch");
-            //     let currentSWNum = "";
-            //     do {
-            //         currentSWNum = currentSWNum + currentSWNumTempArr[1].toString().charAt(0);
-            //         currentSWNumTempArr[1] = currentSWNumTempArr[1].toString().substring(1);
-            //     } while(currentSWNumTempArr[1].toString().charAt(0) == parseInt(currentSWNumTempArr[1].toString().charAt(0)));
-            //     currentSWNum = parseInt(currentSWNum);
-            //     return currentSWNum;
-            // }
+
+            // Calculating current element's Stopwatch number (currentLapNum)
             const currElementSWNum = function () {
                 let currentLapClasses = element.getAttribute("class");  // returns a string
                 let currentLapNumTempArr = currentLapClasses.split("stopWatch");
@@ -708,11 +697,7 @@ window.onload = function () {
                 currentLapNum = parseInt(currentLapNum);
                 return currentLapNum;
             }
-        });
-            // }
-
-        // });
-        
+        });        
 
         // The top (running) lap
         laps.item(0).onmouseover = function() {
