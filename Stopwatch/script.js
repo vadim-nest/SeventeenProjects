@@ -68,12 +68,10 @@ window.onload = function () {
             // Styling
             startStopButtonStyling();
 
-            lapsStyling();             
-
             startClicked = true;
             mainTimerStartOrContinue = false;
 
-            
+            lapsStyling();               
         } 
         // Stop button
         else if(startClicked) {
@@ -117,7 +115,7 @@ window.onload = function () {
             newLapDiv.classList.add("lapNum" + lapsCounter);
             newLapDiv.classList.add("stopWatch" + stopWatchCounter);
     
-            newLapDiv.innerHTML = `<span class="lapWord${lapsCounter}">Lap ${lapsCounter}</span> - <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
+            newLapDiv.innerHTML = `<span class="lapWord${lapsCounter}">Lap ${lapsCounter}</span> <span class="lapDash">-</span> <span class="hoursAndDotsLaps">${timeArrLaps[0]}:</span>${timeArrLaps[1]}:${timeArrLaps[2]}.${timeArrLaps[3]}`;
             
             // add the newly created element and its content into the DOM
             // const currentDiv = document.querySelector("laps");
@@ -149,15 +147,28 @@ window.onload = function () {
                     timeArrMain[i] = "0" + timeArrMain[i].toString();
                 }
             }
+            
             // Save the Main Time below (with laps)
-            const newStopWDiv = document.createElement("h3");
-            newStopWDiv.classList.add("stopwatch");
-            newStopWDiv.innerHTML = `${timeArrMain[0]}:${timeArrMain[1]}:${timeArrMain[2]}.${timeArrMain[3]}`;
-            document.querySelector(".stopWatch" + stopWatchCounter).prepend(newStopWDiv);
+            if(!mainTimerStartOrContinue) {
+                const newStopWDiv = document.createElement("h3");
+                newStopWDiv.classList.add("stopwatch");
+                newStopWDiv.innerHTML = `${timeArrMain[0]}:${timeArrMain[1]}:${timeArrMain[2]}.${timeArrMain[3]}`;
+                document.querySelector(".stopWatch" + stopWatchCounter).prepend(newStopWDiv);
+            }
+
+
+            // Add line breaks between stopwatches
+            if(!mainTimerStartOrContinue) {
+                const newLineBreak = document.createElement("hr");
+                newLineBreak.classList.add("lineBreak");
+                document.querySelector(".stopWatch" + stopWatchCounter).prepend(newLineBreak);
+            }
 
             // Save Best/Worst time for each Stopwatch
-            document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + bestLap).classList.add("bestLap");
-            document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + worstLap).classList.add("worstLap");
+            if (lapsCounter > 2) {
+                document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + bestLap).classList.add("bestLap");
+                document.querySelector(".stopWatch" + stopWatchCounter + " .lapNum" + worstLap).classList.add("worstLap");
+            }
 
             // Reset Main Timer
             clearInterval(Interval);
@@ -190,15 +201,13 @@ window.onload = function () {
             lapsCounter = 1;
             appendLapsCounter.innerHTML = lapsCounter;
 
-            // Save Best/Worst Lap for every Stopwatch
-            document.querySelector(".stopWatch" + stopWatchCounter + " .lapWord" + bestLap).classList.add("bestLap");
-            document.querySelector(".stopWatch" + stopWatchCounter + " .lapWord" + worstLap).classList.add("worstLap");
-
             bestWorstLapArr = [];
 
             mainTimerStartOrContinue = true;
             stopWatchCounter++;
             lapColorOnStart();
+            stopwatchStyling();
+            lapsStyling();             
         }
     }
 
@@ -348,9 +357,6 @@ window.onload = function () {
         }
 
         lapsStyling();
-
-        console.log(bestWorstLapArr);
-
     }
 
 
@@ -460,11 +466,9 @@ window.onload = function () {
         if(!startClicked) {     // Start button
             buttonStart.style.background = "#FFCC00";
             buttonStart.style.border = "solid 3px #FFCC00";
-            buttonStart.style.fontSize = "1.18em";
         }
         if(startClicked) {      // Stop button
             buttonStart.style.background = "#F5F5F5";
-            buttonStart.style.fontSize = "1.18em";
             buttonStart.style.border = "solid 3px #FFCC00";
         }
     });
@@ -473,11 +477,9 @@ window.onload = function () {
         if(!startClicked) {     // Start button
             buttonStart.style.background = "#FFCC00";
             buttonStart.style.border = "solid 3px #FFDB4D";
-            buttonStart.style.fontSize = "1.2em";
         }
         if(startClicked) {      // Stop button
             buttonStart.style.background = "#ffffff";
-            buttonStart.style.fontSize = "1.2em";
             buttonStart.style.border = "solid 3px #FFDB4D";
         }
     });
@@ -488,11 +490,9 @@ window.onload = function () {
             if(!startClicked) {     // Start button
                 buttonLapReset.style.background = "#FFCC00";
                 buttonLapReset.style.border = "solid 3px #FFCC00";
-                buttonLapReset.style.fontSize = "1.18em";
             }
             if(startClicked) {      // Stop button
                 buttonLapReset.style.background = "#F5F5F5";
-                buttonLapReset.style.fontSize = "1.18em";
                 buttonLapReset.style.border = "solid 3px #FFCC00";
             }
         }
@@ -503,11 +503,9 @@ window.onload = function () {
             if(!startClicked) {     // Start button
                 buttonLapReset.style.background = "#FFCC00";
                 buttonLapReset.style.border = "solid 3px #FFDB4D";
-                buttonLapReset.style.fontSize = "1.2em";
             }
             if(startClicked) {      // Stop button
                 buttonLapReset.style.background = "#ffffff";
-                buttonLapReset.style.fontSize = "1.2em";
                 buttonLapReset.style.border = "solid 3px #FFDB4D";
             }
         }
@@ -592,9 +590,10 @@ window.onload = function () {
         const laps = document.querySelectorAll("p.lap");
 
 
-        //  White color for hours in laps on page load, starting with second lap
+        //  White color for hours in laps on page load and for dashes, starting with second lap
         runningLapHours.style.color = "#ffffff";
         runningLapHoursDots.style.color = "#ffffff";
+        document.querySelector(".lapDash").style.color = "#ffffff";
 
         if (laps.length > 1) {
             document.querySelector(".hoursAndDotsLaps").style.color = "#ffffff"; 
@@ -603,9 +602,6 @@ window.onload = function () {
         
         // All the other laps (except the top one)
         const stopwatches = document.querySelectorAll(".allStopWatches");
-        console.log(stopwatches);
-
-
 
         laps.forEach(element => {
         
@@ -620,6 +616,8 @@ window.onload = function () {
                 // Changing hours color on hover
                 document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
                 document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
+                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#222222";
+                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.2s ease-in-out";
 
                 // Best/Worst Laps on hover
                 document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
@@ -664,6 +662,8 @@ window.onload = function () {
                 let currentSWNum = currElementSWNum();
                 document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
                 document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
+                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.4s ease-in-out";
+                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#ffffff";
                 
                 // Best/Worst Laps out hover
                 document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.4s ease-in-out";
@@ -697,12 +697,41 @@ window.onload = function () {
                 currentLapNum = parseInt(currentLapNum);
                 return currentLapNum;
             }
-        });        
+        });  
+        
+        
+        // Show laps on click
+        let lapsToggle = document.querySelectorAll(".stopwatch");
+        console.log(lapsToggle);
+
+        lapsToggle.forEach(element => {
+            element.addEventListener()
+        });
+
+
+        //////////////
+        let coll = document.querySelectorAll(".stopwatch");
+
+        for (let i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                console.log("pressed");
+                let content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+
 
         // The top (running) lap
         laps.item(0).onmouseover = function() {
-            laps.item(0).style.transition = "all 0.4s ease-in-out";
+            laps.item(0).style.transition = "all 0.2s ease-in-out";
             laps.item(0).style.color = "#222222"  // Black
+            document.querySelector(".lapDash").style.transition = "all 0.2s ease-in-out";
+            document.querySelector(".lapDash").style.color = "#222222";
 
             // Red for seconds
             runningLapSeconds.style.transition = "all 0.2s ease-in-out";
@@ -715,11 +744,12 @@ window.onload = function () {
             runningLapHoursDots.style.color = "#222222";
         }
         laps.item(0).onmouseout = function() {
-            // clearInterval(flashSecLap, 1000);
             firstLapHovered = false;
 
             laps.item(0).style.transition = "all 0.4s ease-in-out";
             laps.item(0).style.color = "#A3A3A3";  // Grey for laps
+            document.querySelector(".lapDash").style.transition = "all 0.4s ease-in-out";
+            document.querySelector(".lapDash").style.color = "#ffffff";
 
             runningLapSeconds.style.transition = "all 0.4s ease-in-out";
             runningLapSeconds.style.color = "#A3A3A3";  // Grey for laps
@@ -729,11 +759,28 @@ window.onload = function () {
             runningLapHoursDots.style.transition = "all 0.4s ease-in-out";
             runningLapHoursDots.style.color = "#ffffff";
         }
-
-
-        
-        
     }
+
+
+    // Styling of Stopwatches (h3)
+    const stopwatchStyling = function () {
+        const stopwatches = document.querySelectorAll("h3.stopwatch");
+
+        stopwatches.forEach(element => {
+            element.onmouseover = function() {
+                element.style.transition = "all 0.2s ease-in-out";
+                element.style.color = "#222222"  // Black
+            }
+            element.onmouseout = function() {
+                element.style.transition = "all 0.4s ease-in-out";
+                element.style.color = "#A3A3A3"  // Black
+            }
+        });
+
+    }
+
+
+
     
 
    

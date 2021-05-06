@@ -62,7 +62,8 @@ h3 {
   color: #ffffff;
   font-size: 1.35em;
 }
-.hidden {
+.hidden,
+.lapDash {
   color: #ffffff;
 }
 #seconds {
@@ -97,15 +98,14 @@ button {
   border: solid 3px #ebebeb;
   color: #ebebeb;
 }
-
-/* button:hover {
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-  background: #222222;
-  border: solid 1px #fff;
-  color: #fff;
-} */
+.lineBreak {
+  color: #a3a3a3;
+  border: 0.5px solid #ebebeb;
+  border-radius: 5px;
+  width: 150px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 /* Added some padding-right, because tens are smaller then other numbers */
 p {
