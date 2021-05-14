@@ -38,6 +38,7 @@ window.onload = function () {
     let bestLap;
     // let previousLapHover;
     let stopWatchCounter = 1;
+    let lapsColorToggle = false;
     
 
     // After you finish with this, you'll need to change the name of the Start button to Start-Stop button (in your code)
@@ -583,147 +584,279 @@ window.onload = function () {
 
         let runningLapHours = document.querySelector(".hiddenHoursLaps");
         let runningLapHoursDots = document.querySelector(".dotsLaps");
-
-        document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
-        document.querySelector(".runningLap").style.color = "#A3A3A3";
-
         const laps = document.querySelectorAll("p.lap");
 
+        // Check, maybe these need to be moved down (or removed)
+        if (!lapsColorToggle) {
+            document.querySelector(".laps").style.color = "#A3A3A3";   // grey for laps
+            document.querySelector(".runningLap").style.color = "#A3A3A3";
 
-        //  White color for hours in laps on page load and for dashes, starting with second lap
-        runningLapHours.style.color = "#ffffff";
-        runningLapHoursDots.style.color = "#ffffff";
-        document.querySelector(".lapDash").style.color = "#ffffff";
+            if (laps.length > 1) {
+                document.querySelector(".hoursAndDotsLaps").style.color = "#ffffff"; 
+            }
 
-        if (laps.length > 1) {
-            document.querySelector(".hoursAndDotsLaps").style.color = "#ffffff"; 
+            //  White color for hours in laps on page load and for dashes, starting with second lap
+            runningLapHours.style.color = "#ffffff";
+            runningLapHoursDots.style.color = "#ffffff";
+            document.querySelector(".lapDash").style.color = "#ffffff";
+        } else {
+            document.querySelector(".laps").style.color = "#222222";
+            console.log("#222222");
         }
 
+                    // Calculating current element's lap number (currentLapNum)
+                    const currElementNum = function (element) {
+                        let currentLapClasses = element.getAttribute("class");  // returns a string
+                        console.log(currentLapClasses);
+                        let currentLapNumTempArr = currentLapClasses.split("lapNum");
+                        let currentLapNum = "";
+                        do {
+                            currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                            currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+                        } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+                        currentLapNum = parseInt(currentLapNum);
+                        return currentLapNum;
+                    }
         
-        // All the other laps (except the top one)
-        const stopwatches = document.querySelectorAll(".allStopWatches");
+                    // Calculating current element's Stopwatch number (currentLapNum)
+                    const currElementSWNum = function (element) {
+                        console.log(element);
+                        let currentLapClasses = element.getAttribute("class");  // returns a string
+                        console.log(currentLapClasses);
+                        let currentLapNumTempArr = currentLapClasses.split("stopWatch");
+                        let currentLapNum = "";
+                        do {
+                            currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                            currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+                        } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+                        currentLapNum = parseInt(currentLapNum);
+                        return currentLapNum;
+                    }
 
         laps.forEach(element => {
         
-            element.onmouseover = function() {
-                element.style.transition = "all 0.2s ease-in-out";
-                element.style.color = "#222222"  // Black
-
-
-                let currentLapNum = currElementNum();
-                let currentSWNum = currElementSWNum();
-                
-                // Changing hours color on hover
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#222222";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.2s ease-in-out";
-
-                // Best/Worst Laps on hover
-                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
-                if(element.classList.contains("bestLap")) {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#68A357";
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #68A357";
-                } else if(element.classList.contains("worstLap")) {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#EE0000";
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #EE0000";
-                } else {
-                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#222222";
-                }
-
-                // For the laps of timer that didn't finish yet (try to combine them with the ones that finished)
-                if(currentSWNum === stopWatchCounter) {
-                    if (bestLap === parseInt(currentLapNum)) {
-                        document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
-                        document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
-                        document.querySelector(".lapWord" + bestLap).style.transition = "all 0.1s ease-out";
-                        document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
-                    } else if (worstLap === parseInt(currentLapNum)) {
-                        document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
-                        document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
-                        document.querySelector(".lapWord" + worstLap).style.transition = "all 0.1s ease-out";
-                        document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
+            if (!lapsColorToggle) {
+                element.onmouseover = function() {
+                    element.style.transition = "all 0.2s ease-in-out";
+                    element.style.color = "#222222"  // Black
+    
+    
+                    let currentLapNum = currElementNum(element);
+                    let currentSWNum = currElementSWNum(element);
+                    
+                    // Changing hours color on hover
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.2s ease-in-out";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#222222";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#222222";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.2s ease-in-out";
+    
+                    // Best/Worst Laps on hover
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                    if(element.classList.contains("bestLap")) {
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#68A357";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #68A357";
+                    } else if(element.classList.contains("worstLap")) {
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#EE0000";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #EE0000";
                     } else {
-                        // All the other laps are (the Lap word itself)
-                        document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
-                        document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
+                        document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#222222";
+                    }
+    
+                    // For the laps of timer that didn't finish yet (try to combine them with the ones that finished)
+                    if(currentSWNum === stopWatchCounter) {
+                        if (bestLap === parseInt(currentLapNum)) {
+                            document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                            document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
+                            document.querySelector(".lapWord" + bestLap).style.transition = "all 0.1s ease-out";
+                            document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                        } else if (worstLap === parseInt(currentLapNum)) {
+                            document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
+                            document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
+                            document.querySelector(".lapWord" + worstLap).style.transition = "all 0.1s ease-out";
+                            document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
+                        } else {
+                            // All the other laps are (the Lap word itself)
+                            document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                            document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
+                        }
                     }
                 }
-            }
-
-            element.onmouseout = function() {
-                element.style.transition = "all 0.4s ease-in-out";
-                element.style.color = "#A3A3A3";  // Grey for laps
-
-                // Changing hours color out hover
-                let currentLapNum = currElementNum();
-                let currentSWNum = currElementSWNum();
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#ffffff";
-                
-                // Best/Worst Laps out hover
-                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.4s ease-in-out";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#A3A3A3";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
-                document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "none";
-            }
-
-            // Calculating current element's lap number (currentLapNum)
-            const currElementNum = function () {
-                let currentLapClasses = element.getAttribute("class");  // returns a string
-                let currentLapNumTempArr = currentLapClasses.split("lapNum");
-                let currentLapNum = "";
-                do {
-                    currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
-                    currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
-                currentLapNum = parseInt(currentLapNum);
-                return currentLapNum;
-            }
-
-            // Calculating current element's Stopwatch number (currentLapNum)
-            const currElementSWNum = function () {
-                let currentLapClasses = element.getAttribute("class");  // returns a string
-                let currentLapNumTempArr = currentLapClasses.split("stopWatch");
-                let currentLapNum = "";
-                do {
-                    currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
-                    currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
-                currentLapNum = parseInt(currentLapNum);
-                return currentLapNum;
-            }
-        });  
-        
-        
-        // Show laps on click
-        let lapsToggle = document.querySelectorAll(".stopwatch");
-        console.log(lapsToggle);
-
-        lapsToggle.forEach(element => {
-            element.addEventListener()
-        });
-
-
-        //////////////
-        let coll = document.querySelectorAll(".stopwatch");
-
-        for (let i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                console.log("pressed");
-                let content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
+    
+                element.onmouseout = function() {
+                    element.style.transition = "all 0.4s ease-in-out";
+                    element.style.color = "#A3A3A3";  // Grey for laps
+    
+                    // Changing hours color out hover
+                    let currentLapNum = currElementNum(element);
+                    let currentSWNum = currElementSWNum(element);
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.transition = "all 0.4s ease-in-out";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .hoursAndDotsLaps").style.color = "#ffffff";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.transition = "all 0.4s ease-in-out";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapNum" + currentLapNum + " .lapDash").style.color = "#ffffff";
+                    
+                    // Best/Worst Laps out hover
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.4s ease-in-out";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#A3A3A3";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-in-out";
+                    document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "none";
                 }
-            });
-        }
+            } else {
+
+                let hoursColor = document.querySelectorAll(".hoursAndDotsLaps");
+                hoursColor.forEach(hour => {
+                    hour.style.transition = "all 0.2s ease-in-out";
+                    hour.style.color = "#222222";
+                });
+
+                let dashesColor = document.querySelectorAll(".lapDash");
+                dashesColor.forEach(dash => {
+                    dash.style.transition = "all 0.2s ease-in-out";
+                    dash.style.color = "#222222";
+                });
+
+
+                // // Best/Worst Laps on hover
+                // document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                // if(element.classList.contains("bestLap")) {
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#68A357";
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #68A357";
+                // } else if(element.classList.contains("worstLap")) {
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#EE0000";
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #EE0000";
+                // } else {
+                //     document.querySelector(".stopWatch" + currentSWNum + " .lapWord" + currentLapNum).style.color = "#222222";
+                // }
+
+                // laps.forEach(elementTemp => {
+                //     // console.log()
+                //     // let currentLapNumTemp = currElementNum(elementTemp);
+                //     if(elementTemp.classList.contains("bestLap")) {
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.color = "#68A357";
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.transition = "all 0.1s ease-out";
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.borderBottom = "solid 2px #68A357";
+                //     } else if(elementTemp.classList.contains("worstLap")) {
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.color = "#EE0000";
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.transition = "all 0.1s ease-out";
+                //         document.querySelector(".lapWord" + currentLapNumTemp).style.borderBottom = "solid 2px #EE0000";
+                //     }
+                // });
+
+                // console.log(element.classList);
+
+                // if(element.classList.contains("bestLap")) {
+                //     console.log("tartata");
+                // }
+
+                let allSW = document.querySelectorAll(".allStopWatches");
+                allSW.forEach(elementAllSW => {
+                    let currentSW = currElementSWNum(elementAllSW);
+                    let currentLapNum = 
+                    document.querySelector(".stopWatch" + currentSW + " .bestLap" + " .lapWord" + currentLapNum).style.color = "#68A357";
+                    document.querySelector(".stopWatch" + currentSW + " .bestLap" + " .lapWord" + currentLapNum).style.transition = "all 0.1s ease-out";
+                    document.querySelector(".stopWatch" + currentSW + " .bestLap" + " .lapWord" + currentLapNum).style.borderBottom = "solid 2px #68A357";
+                });
+
+
+
+                // For the laps of timer that didn't finish yet (try to combine them with the ones that finished)
+                // if(currentSWNum === stopWatchCounter) {
+                //     if (bestLap === parseInt(currentLapNum)) {
+                //         document.querySelector(".lapWord" + bestLap).style.transition = "all 0.2s ease-in-out";
+                //         document.querySelector(".lapWord" + bestLap).style.color = "#68A357";
+                //         document.querySelector(".lapWord" + bestLap).style.transition = "all 0.1s ease-out";
+                //         document.querySelector(".lapWord" + bestLap).style.borderBottom = "solid 2px #68A357";
+                //     } else if (worstLap === parseInt(currentLapNum)) {
+                //         document.querySelector(".lapWord" + worstLap).style.transition = "all 0.2s ease-in-out";
+                //         document.querySelector(".lapWord" + worstLap).style.color = "#EE0000";
+                //         document.querySelector(".lapWord" + worstLap).style.transition = "all 0.1s ease-out";
+                //         document.querySelector(".lapWord" + worstLap).style.borderBottom = "solid 2px #EE0000";
+                //     } else {
+                //         // All the other laps are (the Lap word itself)
+                //         document.querySelector(".lapWord" + currentLapNum).style.transition = "all 0.2s ease-in-out";
+                //         document.querySelector(".lapWord" + currentLapNum).style.color = "#222222";
+                //     }
+                // }
+                                    
+                
+                
+                element.onmouseover = function() {
+
+
+                    // element.style.transition = "all 0.2s ease-in-out";
+                    // element.style.color = "#222222"  // Black
+
+                    // console.log(element);
+                    // let currentLapNum = currElementNum(element);
+                    // let currentSWNum = currElementSWNum(element);
+
+                    // console.log(currentLapNum);
+                    // console.log(currentSWNum);
+                    
+
+                }
+                element.onmouseout = function() {
+                    // let currentLapNum = currElementNum(element);
+                    // let currentSWNum = currElementSWNum(element);
+                    // element.style.color = "#222222";
+                }
+            }
+
+            // Toggle laps color onclick
+            element.onclick = function() {
+                if(lapsColorToggle) {
+                    lapsColorToggle = false;
+                    console.log("false");
+                } else {
+                    lapsColorToggle = true;
+                    console.log("true");
+                }
+                lapsStyling();
+            }
+
+
+        });  
+
+
+
+        
+        ///////////////////////////////////////////////
+        // Show laps on click
+        ////////// This is a working function, but I need to add some transition to it and some nice design and I don't want to do it now
+        ////////// because I want to move on to the next project. 
+        /////////////////////////////////////////////
+        // let lapsToggle = document.querySelectorAll(".stopwatch");
+        // console.log(lapsToggle);
+
+        // lapsToggle.forEach(element => {
+
+        //     element.onclick = function() {
+        //         // element.classList.toggle("active");
+        //         // let content = document.querySelectorAll
+
+        //         let currentSWNum = currElementSWNum(element.nextElementSibling);
+        //         console.log(currentSWNum);
+
+        //         if (element.nextElementSibling.style.display === "block") {
+        //             // element.style.display = "none";
+        //             let temp = document.querySelectorAll("p.lap.stopWatch" + currentSWNum);
+        //             temp.forEach(elemenTemp => {
+        //                 elemenTemp.style.transition = "all 0.4s ease-in-out";
+        //                 elemenTemp.style.display = "none";
+        //             });
+        //         } else {
+        //             // element.nextElementSibling.style.display = "block";
+        //             let temp = document.querySelectorAll("p.lap.stopWatch" + currentSWNum);
+        //             temp.forEach(elemenTemp => {
+        //                 elemenTemp.style.transition = "all 0.4s ease-in-out";
+        //                 elemenTemp.style.display = "block";
+        //             });                
+        //         }
+        //     }
+        // });
 
 
         // The top (running) lap

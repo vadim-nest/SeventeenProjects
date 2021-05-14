@@ -17,6 +17,11 @@ body {
   color: #222222;
   text-align: center;
 }
+/* Tens and the dot font is smalller, added padding for centering */
+#tens {
+  /* padding-right: 11.9px; */
+  padding-right: 14.03px;
+}
 .runningLap {
   width: 800px;
   margin: 30px auto;
@@ -107,7 +112,10 @@ button {
   margin-bottom: 20px;
 }
 
-/* Added some padding-right, because tens are smaller then other numbers */
-p {
-  padding-right: 1.3em;
+/*  Removing space between the running and the next laps   */
+.laps {
+  margin-top: 0;
+}
+.runningLap {
+  margin-bottom: 0;
 }
