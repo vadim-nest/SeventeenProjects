@@ -611,38 +611,42 @@ window.onload = function () {
             console.log("#222222");
         }
 
-                    // Calculating current element's lap number (currentLapNum)
-                    const currElementNum = function (element) {
-                        let currentLapClasses = element.getAttribute("class");  // returns a string
-                        console.log(currentLapClasses);
-                        let currentLapNumTempArr = currentLapClasses.split("lapNum");
-                        let currentLapNum = "";
-                        do {
-                            currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
-                            currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                        } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
-                        currentLapNum = parseInt(currentLapNum);
-                        return currentLapNum;
-                    }
-        
-                    // Calculating current element's Stopwatch number (currentLapNum)
-                    const currElementSWNum = function (element) {
-                        console.log(element);
-                        let currentLapClasses = element.getAttribute("class");  // returns a string
-                        console.log(currentLapClasses);
-                        let currentLapNumTempArr = currentLapClasses.split("stopWatch");
-                        let currentLapNum = "";
-                        do {
-                            currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
-                            currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
-                        } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
-                        currentLapNum = parseInt(currentLapNum);
-                        return currentLapNum;
-                    }
+        // Calculating current element's lap number (currentLapNum)
+        const currElementNum = function (element) {
+            let currentLapClasses = element.getAttribute("class");  // returns a string
+            console.log(currentLapClasses);
+            let currentLapNumTempArr = currentLapClasses.split("lapNum");
+            let currentLapNum = "";
+            do {
+                currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+            } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+            currentLapNum = parseInt(currentLapNum);
+            return currentLapNum;
+        }
+
+        // Calculating current element's Stopwatch number (currentLapNum)
+        const currElementSWNum = function (element) {
+            console.log(element);
+            let currentLapClasses = element.getAttribute("class");  // returns a string
+            console.log(currentLapClasses);
+            let currentLapNumTempArr = currentLapClasses.split("stopWatch");
+            let currentLapNum = "";
+            do {
+                currentLapNum = currentLapNum + currentLapNumTempArr[1].toString().charAt(0);
+                currentLapNumTempArr[1] = currentLapNumTempArr[1].toString().substring(1);
+            } while(currentLapNumTempArr[1].toString().charAt(0) == parseInt(currentLapNumTempArr[1].toString().charAt(0)));
+            currentLapNum = parseInt(currentLapNum);
+            return currentLapNum;
+        }
 
         laps.forEach(element => {
         
             if (!lapsColorToggle) {
+
+
+
+
                 element.onmouseover = function() {
                     element.style.transition = "all 0.2s ease-in-out";
                     element.style.color = "#222222"  // Black
@@ -723,6 +727,8 @@ window.onload = function () {
                     dash.style.transition = "all 0.2s ease-in-out";
                     dash.style.color = "#222222";
                 });
+
+
 
                 let allSW = document.querySelectorAll(".allStopWatches");
                 allSW.forEach(elementAllSW => {
