@@ -84,11 +84,11 @@ h3 {
 button {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
-  border-radius: 40px;
+  border-radius: 20px;
   -khtml-border-radius: 5px;
-  background: #ffdb4d;
+  background: #bee265;
   color: #222222;
-  border: solid 3px #ffdb4d;
+  border: solid 3px #bee265;
   text-decoration: none;
   cursor: pointer;
   font-size: 1.2em;
